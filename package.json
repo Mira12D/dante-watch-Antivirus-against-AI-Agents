@@ -1,0 +1,37 @@
+{
+  "name": "dante-watch",
+  "version": "0.1.18",
+  "description": "Dante watches your own server and never lies to itself: every verdict carries the real line it came from.",
+  "type": "module",
+  "bin": {
+    "dante-watch": "src/cli.mjs",
+    "dante": "src/cli.mjs"
+  },
+  "files": [
+    "src",
+    "!src/**/*.test.mjs",
+    "!src/lab/**",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT",
+  "dependencies": {},
+  "keywords": [
+    "security",
+    "server",
+    "cve",
+    "php",
+    "self-check",
+    "zero-dependencies"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mira12D/dante-watch-Antivirus-against-AI-Agents.git"
+  },
+  "homepage": "https://github.com/Mira12D/dante-watch-Antivirus-against-AI-Agents#readme",
+  "bugs": {
+    "url": "https://github.com/Mira12D/dante-watch-Antivirus-against-AI-Agents/issues"
+  }
+}

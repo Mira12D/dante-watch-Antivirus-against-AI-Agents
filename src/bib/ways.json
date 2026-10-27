@@ -1,0 +1,1450 @@
+[
+  {
+    "id": "listen-open",
+    "os": "mac",
+    "aliases": [
+      "offener port",
+      "port offen",
+      "ports offen",
+      "listening port",
+      "open port",
+      "puerto abierto",
+      "lauscht",
+      "0.0.0.0"
+    ],
+    "source": "MITRE ATT&CK T1190 Exploit Public-Facing Application; T1133 External Remote Services",
+    "de": {
+      "title": "Offener Port auf allen Schnittstellen",
+      "what": "Ein Programm wartet auf Verbindungen und nimmt sie von jeder Netzwerkkarte an (Adresse 0.0.0.0 oder ::), nicht nur von deinem eigenen Rechner.",
+      "why": "Ein erreichbarer Dienst ist die Tür von außen: Angreifer scannen Adressbereiche nach offenen Ports und probieren dann Standardpasswörter oder bekannte Lücken des Dienstes durch (Technik: Exploit Public-Facing Application / External Remote Services).",
+      "normal": "Nur Dienste, die du bewusst von außen brauchst, lauschen auf allen Schnittstellen; alles andere lauscht nur auf 127.0.0.1. Eine Firewall lässt nur die nötigen Ports durch.",
+      "redflag": "Abweichung: ein Port, den du nicht kennst, ein Prozessname, den du nicht installiert hast, oder ein Dienst für den Eigengebrauch (Datenbank, Entwicklungsserver, Debug-Port), der auf allen Schnittstellen hängt."
+    },
+    "en": {
+      "title": "Open port on all interfaces",
+      "what": "A program waits for connections and accepts them from every network interface (address 0.0.0.0 or ::), not only from your own machine.",
+      "why": "A reachable service is a door from the outside: attackers scan address ranges for open ports and then try default passwords or known flaws of that service (technique: Exploit Public-Facing Application / External Remote Services).",
+      "normal": "Only services you deliberately need from outside listen on all interfaces; everything else listens on 127.0.0.1 only. A firewall lets through only the ports that are needed.",
+      "redflag": "Deviation: a port you do not know, a process name you did not install, or a service meant for your own use (database, dev server, debug port) bound to all interfaces."
+    },
+    "es": {
+      "title": "Puerto abierto en todas las interfaces",
+      "what": "Un programa espera conexiones y las acepta desde cada interfaz de red (dirección 0.0.0.0 o ::), no solo desde tu propio equipo.",
+      "why": "Un servicio accesible es una puerta desde fuera: los atacantes escanean rangos de direcciones en busca de puertos abiertos y luego prueban contraseñas por defecto o fallos conocidos del servicio (técnica: Exploit Public-Facing Application / External Remote Services).",
+      "normal": "Solo los servicios que necesitas desde fuera a propósito escuchan en todas las interfaces; el resto escucha solo en 127.0.0.1. Un cortafuegos deja pasar solo los puertos necesarios.",
+      "redflag": "Desviación: un puerto que no conoces, un nombre de proceso que no instalaste, o un servicio de uso propio (base de datos, servidor de desarrollo, puerto de depuración) enlazado a todas las interfaces."
+    },
+    "fix": [
+      {
+        "cmd": "lsof -nP -iTCP -sTCP:LISTEN",
+        "de": "listet alle lauschenden TCP-Ports mit Prozess; ändert nichts",
+        "en": "lists all listening TCP ports with their process; changes nothing",
+        "es": "lista todos los puertos TCP en escucha con su proceso; no cambia nada"
+      },
+      {
+        "cmd": "sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setglobalstate on",
+        "de": "schaltet die eingebaute macOS-Firewall ein",
+        "en": "turns on the built-in macOS firewall",
+        "es": "activa el cortafuegos integrado de macOS"
+      },
+      {
+        "cmd": "sudo launchctl bootout system/<label>",
+        "de": "stoppt einen System-Dienst (Label aus launchctl list); der Dienst startet beim nächsten Boot wieder, wenn seine plist bleibt",
+        "en": "stops a system service (label from launchctl list); it starts again on next boot if its plist stays",
+        "es": "detiene un servicio del sistema (etiqueta de launchctl list); vuelve a arrancar en el próximo inicio si su plist sigue"
+      }
+    ]
+  },
+  {
+    "id": "listen-open",
+    "os": "linux",
+    "aliases": [
+      "offener port",
+      "port offen",
+      "ports offen",
+      "listening port",
+      "open port",
+      "puerto abierto",
+      "lauscht",
+      "0.0.0.0"
+    ],
+    "source": "MITRE ATT&CK T1190 Exploit Public-Facing Application; T1133 External Remote Services",
+    "de": {
+      "title": "Offener Port auf allen Schnittstellen",
+      "what": "Ein Programm wartet auf Verbindungen und nimmt sie von jeder Netzwerkkarte an (Adresse 0.0.0.0 oder ::), nicht nur von deinem eigenen Rechner.",
+      "why": "Ein erreichbarer Dienst ist die Tür von außen: Angreifer scannen Adressbereiche nach offenen Ports und probieren dann Standardpasswörter oder bekannte Lücken des Dienstes durch (Technik: Exploit Public-Facing Application / External Remote Services).",
+      "normal": "Nur Dienste, die du bewusst von außen brauchst, lauschen auf allen Schnittstellen; alles andere lauscht nur auf 127.0.0.1. Eine Firewall lässt nur die nötigen Ports durch.",
+      "redflag": "Abweichung: ein Port, den du nicht kennst, ein Prozessname, den du nicht installiert hast, oder ein Dienst für den Eigengebrauch (Datenbank, Entwicklungsserver, Debug-Port), der auf allen Schnittstellen hängt."
+    },
+    "en": {
+      "title": "Open port on all interfaces",
+      "what": "A program waits for connections and accepts them from every network interface (address 0.0.0.0 or ::), not only from your own machine.",
+      "why": "A reachable service is a door from the outside: attackers scan address ranges for open ports and then try default passwords or known flaws of that service (technique: Exploit Public-Facing Application / External Remote Services).",
+      "normal": "Only services you deliberately need from outside listen on all interfaces; everything else listens on 127.0.0.1 only. A firewall lets through only the ports that are needed.",
+      "redflag": "Deviation: a port you do not know, a process name you did not install, or a service meant for your own use (database, dev server, debug port) bound to all interfaces."
+    },
+    "es": {
+      "title": "Puerto abierto en todas las interfaces",
+      "what": "Un programa espera conexiones y las acepta desde cada interfaz de red (dirección 0.0.0.0 o ::), no solo desde tu propio equipo.",
+      "why": "Un servicio accesible es una puerta desde fuera: los atacantes escanean rangos de direcciones en busca de puertos abiertos y luego prueban contraseñas por defecto o fallos conocidos del servicio (técnica: Exploit Public-Facing Application / External Remote Services).",
+      "normal": "Solo los servicios que necesitas desde fuera a propósito escuchan en todas las interfaces; el resto escucha solo en 127.0.0.1. Un cortafuegos deja pasar solo los puertos necesarios.",
+      "redflag": "Desviación: un puerto que no conoces, un nombre de proceso que no instalaste, o un servicio de uso propio (base de datos, servidor de desarrollo, puerto de depuración) enlazado a todas las interfaces."
+    },
+    "fix": [
+      {
+        "cmd": "ss -ltnp",
+        "de": "listet lauschende TCP-Ports mit Prozess (für fremde Prozesse mit sudo); ändert nichts",
+        "en": "lists listening TCP ports with process (use sudo for other users' processes); changes nothing",
+        "es": "lista puertos TCP en escucha con proceso (con sudo para procesos ajenos); no cambia nada"
+      },
+      {
+        "cmd": "sudo systemctl disable --now <dienst>",
+        "de": "stoppt den Dienst sofort und startet ihn nicht mehr beim Boot",
+        "en": "stops the service now and no longer starts it at boot",
+        "es": "detiene el servicio ahora y deja de arrancarlo al iniciar"
+      },
+      {
+        "cmd": "sudo ufw deny <port>/tcp",
+        "de": "sperrt den Port in ufw (falls ufw aktiv ist: sudo ufw enable)",
+        "en": "blocks the port in ufw (if ufw is active: sudo ufw enable)",
+        "es": "bloquea el puerto en ufw (si ufw está activo: sudo ufw enable)"
+      }
+    ]
+  },
+  {
+    "id": "listen-open",
+    "os": "windows",
+    "aliases": [
+      "offener port",
+      "port offen",
+      "ports offen",
+      "listening port",
+      "open port",
+      "puerto abierto",
+      "lauscht",
+      "0.0.0.0"
+    ],
+    "source": "MITRE ATT&CK T1190 Exploit Public-Facing Application; T1133 External Remote Services",
+    "de": {
+      "title": "Offener Port auf allen Schnittstellen",
+      "what": "Ein Programm wartet auf Verbindungen und nimmt sie von jeder Netzwerkkarte an (Adresse 0.0.0.0 oder ::), nicht nur von deinem eigenen Rechner.",
+      "why": "Ein erreichbarer Dienst ist die Tür von außen: Angreifer scannen Adressbereiche nach offenen Ports und probieren dann Standardpasswörter oder bekannte Lücken des Dienstes durch (Technik: Exploit Public-Facing Application / External Remote Services).",
+      "normal": "Nur Dienste, die du bewusst von außen brauchst, lauschen auf allen Schnittstellen; alles andere lauscht nur auf 127.0.0.1. Eine Firewall lässt nur die nötigen Ports durch.",
+      "redflag": "Abweichung: ein Port, den du nicht kennst, ein Prozessname, den du nicht installiert hast, oder ein Dienst für den Eigengebrauch (Datenbank, Entwicklungsserver, Debug-Port), der auf allen Schnittstellen hängt."
+    },
+    "en": {
+      "title": "Open port on all interfaces",
+      "what": "A program waits for connections and accepts them from every network interface (address 0.0.0.0 or ::), not only from your own machine.",
+      "why": "A reachable service is a door from the outside: attackers scan address ranges for open ports and then try default passwords or known flaws of that service (technique: Exploit Public-Facing Application / External Remote Services).",
+      "normal": "Only services you deliberately need from outside listen on all interfaces; everything else listens on 127.0.0.1 only. A firewall lets through only the ports that are needed.",
+      "redflag": "Deviation: a port you do not know, a process name you did not install, or a service meant for your own use (database, dev server, debug port) bound to all interfaces."
+    },
+    "es": {
+      "title": "Puerto abierto en todas las interfaces",
+      "what": "Un programa espera conexiones y las acepta desde cada interfaz de red (dirección 0.0.0.0 o ::), no solo desde tu propio equipo.",
+      "why": "Un servicio accesible es una puerta desde fuera: los atacantes escanean rangos de direcciones en busca de puertos abiertos y luego prueban contraseñas por defecto o fallos conocidos del servicio (técnica: Exploit Public-Facing Application / External Remote Services).",
+      "normal": "Solo los servicios que necesitas desde fuera a propósito escuchan en todas las interfaces; el resto escucha solo en 127.0.0.1. Un cortafuegos deja pasar solo los puertos necesarios.",
+      "redflag": "Desviación: un puerto que no conoces, un nombre de proceso que no instalaste, o un servicio de uso propio (base de datos, servidor de desarrollo, puerto de depuración) enlazado a todas las interfaces."
+    },
+    "fix": [
+      {
+        "cmd": "Get-NetTCPConnection -State Listen | Where-Object { $_.LocalAddress -in '0.0.0.0','::' }",
+        "de": "zeigt Ports, die auf allen Schnittstellen lauschen (PowerShell); ändert nichts",
+        "en": "shows ports listening on all interfaces (PowerShell); changes nothing",
+        "es": "muestra puertos en escucha en todas las interfaces (PowerShell); no cambia nada"
+      },
+      {
+        "cmd": "Get-Process -Id <PID>",
+        "de": "zeigt, welcher Prozess hinter der PID aus der Liste steckt",
+        "en": "shows which process is behind the PID from the list",
+        "es": "muestra qué proceso hay detrás del PID de la lista"
+      },
+      {
+        "cmd": "New-NetFirewallRule -DisplayName 'Block <port>' -Direction Inbound -Protocol TCP -LocalPort <port> -Action Block",
+        "de": "legt eine Firewall-Regel an, die eingehende Verbindungen auf den Port blockt (Administrator-PowerShell)",
+        "en": "adds a firewall rule that blocks inbound connections to the port (administrator PowerShell)",
+        "es": "crea una regla de cortafuegos que bloquea las conexiones entrantes al puerto (PowerShell como administrador)"
+      }
+    ]
+  },
+  {
+    "id": "listen-loopback",
+    "os": "all",
+    "aliases": [
+      "loopback",
+      "localhost",
+      "127.0.0.1",
+      "nur lokal",
+      "local only",
+      "solo local"
+    ],
+    "de": {
+      "title": "Port nur auf dem eigenen Rechner",
+      "what": "Ein Programm lauscht nur auf 127.0.0.1 oder ::1. Verbindungen kommen nur von deinem eigenen Rechner an.",
+      "why": "Von außen ist der Port nicht direkt erreichbar. Ein Angreifer braucht schon einen Zugang auf dem Rechner oder eine Weiterleitung (Technik: Protocol Tunneling, z. B. ein SSH-Tunnel), um ihn zu erreichen. Lokale Dienste haben deshalb oft schwächere Schutzmaßnahmen.",
+      "normal": "Datenbanken, Entwicklungsserver und Hintergrunddienste für den Eigengebrauch lauschen so. Das ist die übliche Einstellung für alles, was nicht von außen gebraucht wird.",
+      "redflag": "Abweichung: ein lokaler Port, den du nicht kennst, oder ein lokaler Dienst, den ein Programm ohne dein Wissen gestartet hat. Prüfe auch, ob eine Weiterleitung (SSH-Tunnel, Reverse-Proxy) den Port nach außen reicht."
+    },
+    "en": {
+      "title": "Port bound to the local machine only",
+      "what": "A program listens on 127.0.0.1 or ::1 only. Connections arrive only from your own machine.",
+      "why": "The port is not directly reachable from outside. An attacker already needs access to the machine or a forward (technique: Protocol Tunneling, e.g. an SSH tunnel) to reach it. Local services therefore often have weaker protections.",
+      "normal": "Databases, dev servers and background services for your own use listen like this. It is the usual setting for everything that is not needed from outside.",
+      "redflag": "Deviation: a local port you do not know, or a local service a program started without your knowledge. Also check whether a forward (SSH tunnel, reverse proxy) hands the port to the outside."
+    },
+    "es": {
+      "title": "Puerto solo en el propio equipo",
+      "what": "Un programa escucha solo en 127.0.0.1 o ::1. Las conexiones llegan solo desde tu propio equipo.",
+      "why": "El puerto no es accesible directamente desde fuera. Un atacante ya necesita acceso al equipo o un reenvío (técnica: Protocol Tunneling, p. ej. un túnel SSH) para llegar a él. Por eso los servicios locales suelen tener protecciones más débiles.",
+      "normal": "Bases de datos, servidores de desarrollo y servicios en segundo plano de uso propio escuchan así. Es el ajuste habitual para todo lo que no hace falta desde fuera.",
+      "redflag": "Desviación: un puerto local que no conoces, o un servicio local que un programa arrancó sin que lo supieras. Comprueba también si un reenvío (túnel SSH, proxy inverso) entrega el puerto al exterior."
+    },
+    "fix": [
+      {
+        "cmd": "ss -ltnp | grep 127.0.0.1",
+        "de": "Linux: zeigt nur Ports auf Loopback; ändert nichts",
+        "en": "Linux: shows only loopback ports; changes nothing",
+        "es": "Linux: muestra solo puertos en loopback; no cambia nada"
+      },
+      {
+        "cmd": "lsof -nP -iTCP -sTCP:LISTEN | grep 127.0.0.1",
+        "de": "macOS: zeigt nur Ports auf Loopback; ändert nichts",
+        "en": "macOS: shows only loopback ports; changes nothing",
+        "es": "macOS: muestra solo puertos en loopback; no cambia nada"
+      },
+      {
+        "cmd": "Get-NetTCPConnection -State Listen | Where-Object { $_.LocalAddress -in '127.0.0.1','::1' }",
+        "de": "Windows PowerShell: zeigt nur Ports auf Loopback; ändert nichts",
+        "en": "Windows PowerShell: shows only loopback ports; changes nothing",
+        "es": "Windows PowerShell: muestra solo puertos en loopback; no cambia nada"
+      }
+    ]
+  },
+  {
+    "id": "persist-cron",
+    "os": "linux",
+    "aliases": [
+      "cron",
+      "crontab",
+      "geplante befehle",
+      "scheduled job",
+      "tarea cron"
+    ],
+    "source": "MITRE ATT&CK T1053.003 Scheduled Task/Job: Cron",
+    "de": {
+      "title": "Cron-Einträge (geplante Befehle)",
+      "what": "Cron führt Befehle zu festen Zeiten aus. Einträge stehen in deiner Crontab und in Systemdateien (/etc/crontab, /etc/cron.d, /etc/cron.daily und ähnliche).",
+      "why": "Ein Cron-Eintrag startet einen Befehl immer wieder von selbst, auch nach einem Neustart. Angreifer tragen dort ein, damit ihr Zugang zurückkommt (Technik: Persistenz über Scheduled Task/Job: Cron).",
+      "normal": "Du kennst jeden Eintrag und weißt, wofür er da ist (Backup, Aufräumen, Zertifikat erneuern). Ein Nutzer ohne Grund für Zeitpläne hat eine leere Crontab.",
+      "redflag": "Abweichung: ein Eintrag, den du nicht angelegt hast; ein Befehl, der etwas aus dem Netz holt und ausführt (curl oder wget mit sh oder bash); ein Programm in /tmp oder einem versteckten Ordner; ein Eintrag mit sehr kurzem Takt."
+    },
+    "en": {
+      "title": "Cron entries (scheduled commands)",
+      "what": "Cron runs commands at fixed times. Entries live in your crontab and in system files (/etc/crontab, /etc/cron.d, /etc/cron.daily and similar).",
+      "why": "A cron entry starts a command again and again on its own, also after a reboot. Attackers add one so their access comes back (technique: persistence via Scheduled Task/Job: Cron).",
+      "normal": "You know every entry and what it is for (backup, cleanup, certificate renewal). A user with no reason for schedules has an empty crontab.",
+      "redflag": "Deviation: an entry you did not create; a command that fetches something from the network and runs it (curl or wget piped into sh or bash); a program in /tmp or a hidden folder; an entry with a very short interval."
+    },
+    "es": {
+      "title": "Entradas de cron (comandos programados)",
+      "what": "Cron ejecuta comandos a horas fijas. Las entradas están en tu crontab y en archivos del sistema (/etc/crontab, /etc/cron.d, /etc/cron.daily y similares).",
+      "why": "Una entrada de cron lanza un comando una y otra vez por sí sola, también tras reiniciar. Los atacantes añaden una para que su acceso vuelva (técnica: persistencia mediante Scheduled Task/Job: Cron).",
+      "normal": "Conoces cada entrada y para qué sirve (copia de seguridad, limpieza, renovar un certificado). Un usuario sin motivo para tareas programadas tiene un crontab vacío.",
+      "redflag": "Desviación: una entrada que no creaste; un comando que descarga algo de la red y lo ejecuta (curl o wget enlazado a sh o bash); un programa en /tmp o en una carpeta oculta; una entrada con un intervalo muy corto."
+    },
+    "fix": [
+      {
+        "cmd": "crontab -l",
+        "de": "zeigt deine Crontab; ändert nichts",
+        "en": "shows your crontab; changes nothing",
+        "es": "muestra tu crontab; no cambia nada"
+      },
+      {
+        "cmd": "ls -la /etc/cron.d /etc/cron.hourly /etc/cron.daily /etc/cron.weekly /etc/cron.monthly; cat /etc/crontab",
+        "de": "listet die System-Cron-Dateien; ändert nichts",
+        "en": "lists the system cron files; changes nothing",
+        "es": "lista los archivos cron del sistema; no cambia nada"
+      },
+      {
+        "cmd": "crontab -e",
+        "de": "öffnet deine Crontab im Editor; eine Zeile löschen und speichern entfernt den Eintrag",
+        "en": "opens your crontab in the editor; deleting a line and saving removes the entry",
+        "es": "abre tu crontab en el editor; borrar una línea y guardar elimina la entrada"
+      }
+    ]
+  },
+  {
+    "id": "persist-cron",
+    "os": "mac",
+    "aliases": [
+      "cron",
+      "crontab",
+      "geplante befehle",
+      "scheduled job",
+      "tarea cron"
+    ],
+    "source": "MITRE ATT&CK T1053.003 Scheduled Task/Job: Cron",
+    "de": {
+      "title": "Cron-Einträge (geplante Befehle)",
+      "what": "Cron führt Befehle zu festen Zeiten aus. Einträge stehen in deiner Crontab und in Systemdateien (/etc/crontab, /etc/cron.d, /etc/cron.daily und ähnliche).",
+      "why": "Ein Cron-Eintrag startet einen Befehl immer wieder von selbst, auch nach einem Neustart. Angreifer tragen dort ein, damit ihr Zugang zurückkommt (Technik: Persistenz über Scheduled Task/Job: Cron).",
+      "normal": "Du kennst jeden Eintrag und weißt, wofür er da ist (Backup, Aufräumen, Zertifikat erneuern). Ein Nutzer ohne Grund für Zeitpläne hat eine leere Crontab.",
+      "redflag": "Abweichung: ein Eintrag, den du nicht angelegt hast; ein Befehl, der etwas aus dem Netz holt und ausführt (curl oder wget mit sh oder bash); ein Programm in /tmp oder einem versteckten Ordner; ein Eintrag mit sehr kurzem Takt."
+    },
+    "en": {
+      "title": "Cron entries (scheduled commands)",
+      "what": "Cron runs commands at fixed times. Entries live in your crontab and in system files (/etc/crontab, /etc/cron.d, /etc/cron.daily and similar).",
+      "why": "A cron entry starts a command again and again on its own, also after a reboot. Attackers add one so their access comes back (technique: persistence via Scheduled Task/Job: Cron).",
+      "normal": "You know every entry and what it is for (backup, cleanup, certificate renewal). A user with no reason for schedules has an empty crontab.",
+      "redflag": "Deviation: an entry you did not create; a command that fetches something from the network and runs it (curl or wget piped into sh or bash); a program in /tmp or a hidden folder; an entry with a very short interval."
+    },
+    "es": {
+      "title": "Entradas de cron (comandos programados)",
+      "what": "Cron ejecuta comandos a horas fijas. Las entradas están en tu crontab y en archivos del sistema (/etc/crontab, /etc/cron.d, /etc/cron.daily y similares).",
+      "why": "Una entrada de cron lanza un comando una y otra vez por sí sola, también tras reiniciar. Los atacantes añaden una para que su acceso vuelva (técnica: persistencia mediante Scheduled Task/Job: Cron).",
+      "normal": "Conoces cada entrada y para qué sirve (copia de seguridad, limpieza, renovar un certificado). Un usuario sin motivo para tareas programadas tiene un crontab vacío.",
+      "redflag": "Desviación: una entrada que no creaste; un comando que descarga algo de la red y lo ejecuta (curl o wget enlazado a sh o bash); un programa en /tmp o en una carpeta oculta; una entrada con un intervalo muy corto."
+    },
+    "fix": [
+      {
+        "cmd": "crontab -l",
+        "de": "zeigt deine Crontab; ändert nichts",
+        "en": "shows your crontab; changes nothing",
+        "es": "muestra tu crontab; no cambia nada"
+      },
+      {
+        "cmd": "cat /etc/crontab",
+        "de": "listet die System-Cron-Dateien; ändert nichts",
+        "en": "lists the system cron files; changes nothing",
+        "es": "lista los archivos cron del sistema; no cambia nada"
+      },
+      {
+        "cmd": "crontab -e",
+        "de": "öffnet deine Crontab im Editor; eine Zeile löschen und speichern entfernt den Eintrag",
+        "en": "opens your crontab in the editor; deleting a line and saving removes the entry",
+        "es": "abre tu crontab en el editor; borrar una línea y guardar elimina la entrada"
+      }
+    ]
+  },
+  {
+    "id": "persist-systemd-timer",
+    "os": "linux",
+    "aliases": [
+      "systemd timer",
+      "timer",
+      "systemctl list-timers",
+      "temporizador"
+    ],
+    "source": "MITRE ATT&CK T1053.006 Scheduled Task/Job: Systemd Timers",
+    "de": {
+      "title": "systemd-Timer",
+      "what": "Ein systemd-Timer startet eine Service-Einheit zu festen Zeiten oder nach einem Ereignis. Es gibt System-Timer und Timer pro Nutzer (systemctl --user).",
+      "why": "Wie bei Cron startet der Timer einen Befehl von selbst, auch nach dem Neustart. Er fällt weniger auf als eine Crontab-Zeile, weil viele Leute dort nicht nachsehen (Technik: Persistenz über Scheduled Task/Job: Systemd Timers).",
+      "normal": "Timer kommen vom Paketmanager (Updates, Log-Rotation, Aufräumen) oder von dir selbst. Eigene Einheiten liegen in /etc/systemd/system oder ~/.config/systemd/user.",
+      "redflag": "Abweichung: ein Timer, den kein Paket und keine Absicht von dir erklärt; eine zugehörige Service-Datei, deren ExecStart auf /tmp, einen versteckten Ordner oder ein Skript mit Netzzugriff zeigt; ein Nutzer-Timer auf einem Server, auf dem niemand Nutzer-Timer anlegt."
+    },
+    "en": {
+      "title": "systemd timer",
+      "what": "A systemd timer starts a service unit at fixed times or after an event. There are system timers and per-user timers (systemctl --user).",
+      "why": "Like cron, the timer starts a command on its own, also after a reboot. It stands out less than a crontab line because many people do not look there (technique: persistence via Scheduled Task/Job: Systemd Timers).",
+      "normal": "Timers come from the package manager (updates, log rotation, cleanup) or from you. Your own units sit in /etc/systemd/system or ~/.config/systemd/user.",
+      "redflag": "Deviation: a timer that no package and no intent of yours explains; a matching service file whose ExecStart points to /tmp, a hidden folder or a script with network access; a user timer on a server where nobody sets up user timers."
+    },
+    "es": {
+      "title": "Temporizador de systemd",
+      "what": "Un temporizador de systemd lanza una unidad de servicio a horas fijas o tras un evento. Hay temporizadores del sistema y por usuario (systemctl --user).",
+      "why": "Igual que cron, el temporizador lanza un comando por sí solo, también tras reiniciar. Llama menos la atención que una línea de crontab porque mucha gente no mira ahí (técnica: persistencia mediante Scheduled Task/Job: Systemd Timers).",
+      "normal": "Los temporizadores vienen del gestor de paquetes (actualizaciones, rotación de logs, limpieza) o de ti. Tus unidades propias están en /etc/systemd/system o ~/.config/systemd/user.",
+      "redflag": "Desviación: un temporizador que ningún paquete ni intención tuya explica; un archivo de servicio asociado cuyo ExecStart apunta a /tmp, una carpeta oculta o un script con acceso a la red; un temporizador de usuario en un servidor donde nadie los crea."
+    },
+    "fix": [
+      {
+        "cmd": "systemctl list-timers --all",
+        "de": "listet alle System-Timer; ändert nichts",
+        "en": "lists all system timers; changes nothing",
+        "es": "lista todos los temporizadores del sistema; no cambia nada"
+      },
+      {
+        "cmd": "systemctl --user list-timers --all",
+        "de": "listet deine Nutzer-Timer; ändert nichts",
+        "en": "lists your user timers; changes nothing",
+        "es": "lista tus temporizadores de usuario; no cambia nada"
+      },
+      {
+        "cmd": "systemctl cat <name>.service",
+        "de": "zeigt, was der Timer tatsächlich startet (ExecStart); ändert nichts",
+        "en": "shows what the timer actually starts (ExecStart); changes nothing",
+        "es": "muestra qué lanza realmente el temporizador (ExecStart); no cambia nada"
+      },
+      {
+        "cmd": "sudo systemctl disable --now <name>.timer",
+        "de": "stoppt den Timer und startet ihn nicht mehr beim Boot; bei Nutzer-Timern ohne sudo und mit --user",
+        "en": "stops the timer and no longer starts it at boot; for user timers without sudo and with --user",
+        "es": "detiene el temporizador y deja de arrancarlo al iniciar; para temporizadores de usuario sin sudo y con --user"
+      }
+    ]
+  },
+  {
+    "id": "persist-launchd",
+    "os": "mac",
+    "aliases": [
+      "launchd",
+      "launchagent",
+      "launch agent",
+      "launchdaemon",
+      "launch daemon",
+      "plist",
+      "launchctl"
+    ],
+    "source": "MITRE ATT&CK T1543.001 Create or Modify System Process: Launch Agent; T1543.004 Launch Daemon",
+    "de": {
+      "title": "launchd-Einträge (LaunchAgents und LaunchDaemons)",
+      "what": "launchd ist der Starter von macOS. Eine plist-Datei in ~/Library/LaunchAgents, /Library/LaunchAgents oder /Library/LaunchDaemons sagt ihm, was er beim Login oder beim Boot starten soll und ob es immer wieder neu startet.",
+      "why": "Eine plist startet ein Programm bei jedem Login oder Boot von selbst und hält es am Laufen (Technik: Persistenz über Launch Agent / Launch Daemon). Für Agents in deinem Home-Ordner braucht es keine Administratorrechte.",
+      "normal": "Einträge stammen von Programmen, die du installiert hast (Updater, Cloud-Sync, VPN). Das Label trägt meist den Namen des Herstellers, z. B. com.hersteller.programm.",
+      "redflag": "Abweichung: ein Eintrag, dessen Hersteller du nicht kennst; ein Label, das wie ein Apple-Name aussieht, aber nicht von Apple stammt; ein ProgramArguments-Pfad in /tmp, in einem versteckten Ordner oder in Library/Caches; eine plist mit RunAtLoad und KeepAlive, deren Programm es nicht mehr gibt."
+    },
+    "en": {
+      "title": "launchd entries (LaunchAgents and LaunchDaemons)",
+      "what": "launchd is the macOS starter. A plist file in ~/Library/LaunchAgents, /Library/LaunchAgents or /Library/LaunchDaemons tells it what to start at login or boot and whether to restart it.",
+      "why": "A plist starts a program on every login or boot by itself and keeps it running (technique: persistence via Launch Agent / Launch Daemon). Agents in your home folder need no administrator rights.",
+      "normal": "Entries come from programs you installed (updater, cloud sync, VPN). The label usually carries the vendor name, e.g. com.vendor.program.",
+      "redflag": "Deviation: an entry from a vendor you do not know; a label that looks like an Apple name but is not from Apple; a ProgramArguments path in /tmp, a hidden folder or Library/Caches; a plist with RunAtLoad and KeepAlive whose program no longer exists."
+    },
+    "es": {
+      "title": "Entradas de launchd (LaunchAgents y LaunchDaemons)",
+      "what": "launchd es el lanzador de macOS. Un archivo plist en ~/Library/LaunchAgents, /Library/LaunchAgents o /Library/LaunchDaemons le dice qué arrancar al iniciar sesión o al arrancar y si debe reiniciarlo.",
+      "why": "Un plist lanza un programa en cada inicio de sesión o arranque por sí solo y lo mantiene en marcha (técnica: persistencia mediante Launch Agent / Launch Daemon). Los agents en tu carpeta personal no necesitan derechos de administrador.",
+      "normal": "Las entradas vienen de programas que instalaste (actualizador, sincronización en la nube, VPN). La etiqueta suele llevar el nombre del fabricante, p. ej. com.fabricante.programa.",
+      "redflag": "Desviación: una entrada de un fabricante que no conoces; una etiqueta que parece un nombre de Apple pero no es de Apple; una ruta de ProgramArguments en /tmp, en una carpeta oculta o en Library/Caches; un plist con RunAtLoad y KeepAlive cuyo programa ya no existe."
+    },
+    "fix": [
+      {
+        "cmd": "ls -la ~/Library/LaunchAgents /Library/LaunchAgents /Library/LaunchDaemons",
+        "de": "listet die plist-Dateien; ändert nichts",
+        "en": "lists the plist files; changes nothing",
+        "es": "lista los archivos plist; no cambia nada"
+      },
+      {
+        "cmd": "plutil -p ~/Library/LaunchAgents/<label>.plist",
+        "de": "zeigt den Inhalt einer plist lesbar (Programm, Argumente); ändert nichts",
+        "en": "shows a plist readably (program, arguments); changes nothing",
+        "es": "muestra un plist de forma legible (programa, argumentos); no cambia nada"
+      },
+      {
+        "cmd": "launchctl bootout gui/$(id -u)/<label>",
+        "de": "stoppt den Agent in deiner Sitzung; bei Daemons: sudo launchctl bootout system/<label>",
+        "en": "stops the agent in your session; for daemons: sudo launchctl bootout system/<label>",
+        "es": "detiene el agent en tu sesión; para daemons: sudo launchctl bootout system/<label>"
+      },
+      {
+        "cmd": "mv ~/Library/LaunchAgents/<label>.plist ~/Desktop/",
+        "de": "legt die plist beiseite, damit der Eintrag beim nächsten Login nicht wiederkommt; du kannst sie zurückschieben",
+        "en": "moves the plist aside so the entry does not return at next login; you can move it back",
+        "es": "aparta el plist para que la entrada no vuelva en el próximo inicio de sesión; puedes devolverlo"
+      }
+    ]
+  },
+  {
+    "id": "persist-login-item",
+    "os": "mac",
+    "aliases": [
+      "login item",
+      "anmeldeobjekt",
+      "anmeldeobjekte",
+      "autostart mac",
+      "elemento de inicio",
+      "login items"
+    ],
+    "source": "MITRE ATT&CK T1547.015 Boot or Logon Autostart Execution: Login Items",
+    "de": {
+      "title": "Anmeldeobjekte (Login Items)",
+      "what": "Programme, die macOS beim Login deines Nutzers öffnet. Du siehst sie in Systemeinstellungen, Allgemein, Anmeldeobjekte.",
+      "why": "Ein Anmeldeobjekt startet ein Programm bei jedem Login von selbst und braucht keine Administratorrechte (Technik: Persistenz über Login Items).",
+      "normal": "Du hast die Liste kurz und kennst jeden Eintrag: Cloud-Sync, Passwortmanager, Menüleisten-Helfer.",
+      "redflag": "Abweichung: ein Eintrag mit unbekanntem Namen oder ohne Herstellerangabe; ein Programm, das du nicht mehr installiert glaubst; ein Eintrag, der nach dem Entfernen wiederkommt (dann steckt oft ein LaunchAgent dahinter, siehe persist-launchd)."
+    },
+    "en": {
+      "title": "Login items",
+      "what": "Programs macOS opens when your user logs in. You see them in System Settings, General, Login Items.",
+      "why": "A login item starts a program on every login by itself and needs no administrator rights (technique: persistence via Login Items).",
+      "normal": "Your list is short and you know every entry: cloud sync, password manager, menu bar helpers.",
+      "redflag": "Deviation: an entry with an unknown name or no vendor shown; a program you believe is no longer installed; an entry that returns after removal (often a LaunchAgent is behind it, see persist-launchd)."
+    },
+    "es": {
+      "title": "Elementos de inicio de sesión (Login Items)",
+      "what": "Programas que macOS abre cuando tu usuario inicia sesión. Los ves en Ajustes del Sistema, General, Elementos de inicio.",
+      "why": "Un elemento de inicio lanza un programa en cada inicio de sesión por sí solo y no necesita derechos de administrador (técnica: persistencia mediante Login Items).",
+      "normal": "Tu lista es corta y conoces cada entrada: sincronización en la nube, gestor de contraseñas, ayudantes de la barra de menús.",
+      "redflag": "Desviación: una entrada con nombre desconocido o sin fabricante; un programa que crees que ya no está instalado; una entrada que vuelve tras quitarla (a menudo hay un LaunchAgent detrás, ver persist-launchd)."
+    },
+    "fix": [
+      {
+        "cmd": "osascript -e 'tell application \"System Events\" to get the name of every login item'",
+        "de": "listet die Namen deiner Anmeldeobjekte; ändert nichts (macOS fragt evtl. nach Automations-Erlaubnis)",
+        "en": "lists the names of your login items; changes nothing (macOS may ask for automation permission)",
+        "es": "lista los nombres de tus elementos de inicio; no cambia nada (macOS puede pedir permiso de automatización)"
+      },
+      {
+        "cmd": "osascript -e 'tell application \"System Events\" to delete login item \"<name>\"'",
+        "de": "entfernt das Anmeldeobjekt mit diesem Namen",
+        "en": "removes the login item with this name",
+        "es": "elimina el elemento de inicio con ese nombre"
+      }
+    ]
+  },
+  {
+    "id": "persist-run-key",
+    "os": "windows",
+    "aliases": [
+      "run key",
+      "run-schlüssel",
+      "registry run",
+      "autostart registry",
+      "clave run",
+      "currentversion\\run"
+    ],
+    "source": "MITRE ATT&CK T1547.001 Boot or Logon Autostart Execution: Registry Run Keys / Startup Folder",
+    "de": {
+      "title": "Run-Schlüssel in der Registry",
+      "what": "Windows startet beim Login alle Programme, die unter HKCU und HKLM in Software\\Microsoft\\Windows\\CurrentVersion\\Run (und RunOnce) eingetragen sind. HKCU gilt für deinen Nutzer, HKLM für alle.",
+      "why": "Ein Eintrag dort startet ein Programm bei jedem Login von selbst. HKCU lässt sich ohne Administratorrechte schreiben (Technik: Persistenz über Registry Run Keys).",
+      "normal": "Einträge stammen von installierten Programmen (Updater, Cloud-Sync, Treiber-Tray). Name und Pfad zeigen auf einen Ordner unter Program Files oder AppData des Herstellers.",
+      "redflag": "Abweichung: ein Pfad in Temp, Downloads, ProgramData oder einem Ordner mit zufälligem Namen; ein Befehl mit powershell, cmd, mshta, wscript oder rundll32 statt eines normalen Programms; ein Name, der wie ein Systemdienst klingt, aber von keinem stammt."
+    },
+    "en": {
+      "title": "Run keys in the registry",
+      "what": "At login Windows starts all programs listed under HKCU and HKLM in Software\\Microsoft\\Windows\\CurrentVersion\\Run (and RunOnce). HKCU applies to your user, HKLM to all.",
+      "why": "An entry there starts a program on every login by itself. HKCU can be written without administrator rights (technique: persistence via Registry Run Keys).",
+      "normal": "Entries come from installed programs (updater, cloud sync, driver tray). Name and path point to a vendor folder under Program Files or AppData.",
+      "redflag": "Deviation: a path in Temp, Downloads, ProgramData or a folder with a random name; a command with powershell, cmd, mshta, wscript or rundll32 instead of a normal program; a name that sounds like a system service but is not one."
+    },
+    "es": {
+      "title": "Claves Run del registro",
+      "what": "Al iniciar sesión Windows arranca todos los programas anotados bajo HKCU y HKLM en Software\\Microsoft\\Windows\\CurrentVersion\\Run (y RunOnce). HKCU vale para tu usuario, HKLM para todos.",
+      "why": "Una entrada ahí lanza un programa en cada inicio de sesión por sí sola. HKCU se puede escribir sin derechos de administrador (técnica: persistencia mediante Registry Run Keys).",
+      "normal": "Las entradas vienen de programas instalados (actualizador, sincronización en la nube, bandeja de controladores). Nombre y ruta apuntan a una carpeta del fabricante bajo Program Files o AppData.",
+      "redflag": "Desviación: una ruta en Temp, Descargas, ProgramData o una carpeta con nombre aleatorio; un comando con powershell, cmd, mshta, wscript o rundll32 en vez de un programa normal; un nombre que suena a servicio del sistema pero no lo es."
+    },
+    "fix": [
+      {
+        "cmd": "Get-ItemProperty 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Run'",
+        "de": "zeigt die Run-Einträge deines Nutzers (PowerShell); ändert nichts",
+        "en": "shows your user's Run entries (PowerShell); changes nothing",
+        "es": "muestra las entradas Run de tu usuario (PowerShell); no cambia nada"
+      },
+      {
+        "cmd": "Get-ItemProperty 'HKLM:\\Software\\Microsoft\\Windows\\CurrentVersion\\Run'",
+        "de": "zeigt die Run-Einträge für alle Nutzer; ändert nichts",
+        "en": "shows the Run entries for all users; changes nothing",
+        "es": "muestra las entradas Run de todos los usuarios; no cambia nada"
+      },
+      {
+        "cmd": "Remove-ItemProperty -Path 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Run' -Name '<name>'",
+        "de": "löscht den Eintrag mit diesem Namen (für HKLM Administrator-PowerShell und den HKLM-Pfad)",
+        "en": "deletes the entry with this name (for HKLM use an administrator PowerShell and the HKLM path)",
+        "es": "elimina la entrada con ese nombre (para HKLM usa PowerShell como administrador y la ruta HKLM)"
+      }
+    ]
+  },
+  {
+    "id": "persist-scheduled-task",
+    "os": "windows",
+    "aliases": [
+      "geplante aufgabe",
+      "aufgabenplanung",
+      "scheduled task",
+      "schtasks",
+      "task scheduler",
+      "tarea programada"
+    ],
+    "source": "MITRE ATT&CK T1053.005 Scheduled Task/Job: Scheduled Task",
+    "de": {
+      "title": "Geplante Aufgaben (Task Scheduler)",
+      "what": "Der Windows-Aufgabenplaner führt Programme zu festen Zeiten, beim Login, beim Boot oder bei Ereignissen aus. Aufgaben liegen in einem Ordnerbaum (z. B. \\Microsoft\\Windows für Windows selbst).",
+      "why": "Eine Aufgabe startet ein Programm immer wieder von selbst, auch nach dem Neustart, und kann mit höheren Rechten laufen (Technik: Persistenz über Scheduled Task).",
+      "normal": "Unter \\Microsoft\\Windows liegen die Aufgaben von Windows. Außerhalb davon stehen nur die von dir installierten Programme (Updater für Browser, Office, Treiber).",
+      "redflag": "Abweichung: eine Aufgabe außerhalb von \\Microsoft, deren Hersteller du nicht kennst; eine Aufgabe, deren Aktion powershell, cmd, mshta oder wscript mit langen oder kodierten Argumenten aufruft; ein Programm in Temp, AppData oder ProgramData; ein Name, der einer Windows-Aufgabe ähnelt, aber im falschen Ordner liegt."
+    },
+    "en": {
+      "title": "Scheduled tasks (Task Scheduler)",
+      "what": "The Windows Task Scheduler runs programs at fixed times, at login, at boot or on events. Tasks sit in a folder tree (e.g. \\Microsoft\\Windows for Windows itself).",
+      "why": "A task starts a program again and again on its own, also after a reboot, and can run with higher rights (technique: persistence via Scheduled Task).",
+      "normal": "Under \\Microsoft\\Windows sit the tasks of Windows itself. Outside it, only the programs you installed appear (updaters for browser, Office, drivers).",
+      "redflag": "Deviation: a task outside \\Microsoft from a vendor you do not know; a task whose action calls powershell, cmd, mshta or wscript with long or encoded arguments; a program in Temp, AppData or ProgramData; a name that resembles a Windows task but sits in the wrong folder."
+    },
+    "es": {
+      "title": "Tareas programadas (Programador de tareas)",
+      "what": "El Programador de tareas de Windows ejecuta programas a horas fijas, al iniciar sesión, al arrancar o ante eventos. Las tareas están en un árbol de carpetas (p. ej. \\Microsoft\\Windows para Windows mismo).",
+      "why": "Una tarea lanza un programa una y otra vez por sí sola, también tras reiniciar, y puede correr con más derechos (técnica: persistencia mediante Scheduled Task).",
+      "normal": "Bajo \\Microsoft\\Windows están las tareas del propio Windows. Fuera de ahí solo aparecen los programas que instalaste (actualizadores de navegador, Office, controladores).",
+      "redflag": "Desviación: una tarea fuera de \\Microsoft de un fabricante que no conoces; una tarea cuya acción llama a powershell, cmd, mshta o wscript con argumentos largos o codificados; un programa en Temp, AppData o ProgramData; un nombre parecido a una tarea de Windows pero en la carpeta equivocada."
+    },
+    "fix": [
+      {
+        "cmd": "Get-ScheduledTask | Where-Object { $_.TaskPath -notlike '\\Microsoft\\*' } | Select-Object TaskPath, TaskName, State",
+        "de": "listet Aufgaben außerhalb von \\Microsoft (PowerShell); ändert nichts",
+        "en": "lists tasks outside \\Microsoft (PowerShell); changes nothing",
+        "es": "lista tareas fuera de \\Microsoft (PowerShell); no cambia nada"
+      },
+      {
+        "cmd": "(Get-ScheduledTask -TaskName '<name>').Actions",
+        "de": "zeigt, was die Aufgabe startet; ändert nichts",
+        "en": "shows what the task starts; changes nothing",
+        "es": "muestra qué lanza la tarea; no cambia nada"
+      },
+      {
+        "cmd": "Disable-ScheduledTask -TaskName '<name>'",
+        "de": "schaltet die Aufgabe ab, lässt sie aber stehen (Administrator-PowerShell)",
+        "en": "turns the task off but leaves it in place (administrator PowerShell)",
+        "es": "desactiva la tarea pero la deja (PowerShell como administrador)"
+      },
+      {
+        "cmd": "Unregister-ScheduledTask -TaskName '<name>' -Confirm:$false",
+        "de": "löscht die Aufgabe (Administrator-PowerShell)",
+        "en": "deletes the task (administrator PowerShell)",
+        "es": "elimina la tarea (PowerShell como administrador)"
+      }
+    ]
+  },
+  {
+    "id": "persist-startup-folder",
+    "os": "windows",
+    "aliases": [
+      "autostart-ordner",
+      "startup folder",
+      "autostart ordner",
+      "carpeta de inicio",
+      "shell:startup"
+    ],
+    "source": "MITRE ATT&CK T1547.001 Boot or Logon Autostart Execution: Registry Run Keys / Startup Folder",
+    "de": {
+      "title": "Autostart-Ordner",
+      "what": "Alles, was in diesem Ordner liegt (Programme, Verknüpfungen, Skripte), startet Windows beim Login. Es gibt einen pro Nutzer (%APPDATA%\\Microsoft\\Windows\\Start Menu\\Programs\\Startup) und einen für alle (%ProgramData%\\Microsoft\\Windows\\Start Menu\\Programs\\StartUp).",
+      "why": "Eine Datei im Ordner genügt, um bei jedem Login etwas zu starten; der Nutzer-Ordner braucht keine Administratorrechte (Technik: Persistenz über Startup Folder).",
+      "normal": "Der Ordner ist meist leer oder enthält ein paar Verknüpfungen zu Programmen, die du bewusst automatisch starten lässt.",
+      "redflag": "Abweichung: Skripte (.bat, .cmd, .vbs, .js, .ps1) oder Programme (.exe) statt Verknüpfungen; eine Datei mit Doppelendung wie rechnung.pdf.exe; eine Verknüpfung, deren Ziel in Temp oder Downloads liegt; Dateien, die du nicht angelegt hast."
+    },
+    "en": {
+      "title": "Startup folder",
+      "what": "Everything in this folder (programs, shortcuts, scripts) is started by Windows at login. There is one per user (%APPDATA%\\Microsoft\\Windows\\Start Menu\\Programs\\Startup) and one for all (%ProgramData%\\Microsoft\\Windows\\Start Menu\\Programs\\StartUp).",
+      "why": "One file in the folder is enough to start something at every login; the user folder needs no administrator rights (technique: persistence via Startup Folder).",
+      "normal": "The folder is usually empty or holds a few shortcuts to programs you deliberately let start automatically.",
+      "redflag": "Deviation: scripts (.bat, .cmd, .vbs, .js, .ps1) or programs (.exe) instead of shortcuts; a file with a double extension like invoice.pdf.exe; a shortcut whose target is in Temp or Downloads; files you did not create."
+    },
+    "es": {
+      "title": "Carpeta de inicio",
+      "what": "Todo lo que hay en esta carpeta (programas, accesos directos, scripts) lo arranca Windows al iniciar sesión. Hay una por usuario (%APPDATA%\\Microsoft\\Windows\\Start Menu\\Programs\\Startup) y una para todos (%ProgramData%\\Microsoft\\Windows\\Start Menu\\Programs\\StartUp).",
+      "why": "Basta un archivo en la carpeta para lanzar algo en cada inicio de sesión; la carpeta del usuario no necesita derechos de administrador (técnica: persistencia mediante Startup Folder).",
+      "normal": "La carpeta suele estar vacía o contiene unos pocos accesos directos a programas que dejas arrancar automáticamente a propósito.",
+      "redflag": "Desviación: scripts (.bat, .cmd, .vbs, .js, .ps1) o programas (.exe) en lugar de accesos directos; un archivo con doble extensión como factura.pdf.exe; un acceso directo cuyo destino está en Temp o Descargas; archivos que no creaste."
+    },
+    "fix": [
+      {
+        "cmd": "Get-ChildItem \"$env:APPDATA\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\", \"$env:ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\StartUp\" -Force",
+        "de": "listet beide Autostart-Ordner inklusive versteckter Dateien (PowerShell); ändert nichts",
+        "en": "lists both startup folders including hidden files (PowerShell); changes nothing",
+        "es": "lista ambas carpetas de inicio incluidos los archivos ocultos (PowerShell); no cambia nada"
+      },
+      {
+        "cmd": "Remove-Item \"$env:APPDATA\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\<datei>\"",
+        "de": "löscht die Datei aus deinem Autostart-Ordner; vorher ansehen, was sie startet",
+        "en": "deletes the file from your startup folder; look first at what it starts",
+        "es": "elimina el archivo de tu carpeta de inicio; mira antes qué lanza"
+      }
+    ]
+  },
+  {
+    "id": "persist-authorized-keys",
+    "os": "all",
+    "aliases": [
+      "authorized_keys",
+      "authorized keys",
+      "ssh schlüssel",
+      "ssh key",
+      "llave ssh",
+      "autorisierte schlüssel"
+    ],
+    "source": "MITRE ATT&CK T1098.004 Account Manipulation: SSH Authorized Keys",
+    "de": {
+      "title": "SSH-Schlüssel, die sich bei dir anmelden dürfen (authorized_keys)",
+      "what": "Die Datei listet öffentliche SSH-Schlüssel. Wer den passenden privaten Schlüssel hat, kommt ohne Passwort in dieses Konto.",
+      "why": "Ein zusätzlicher Schlüssel in der Datei ist ein Zugang, der Passwortwechsel und Neustarts überlebt (Technik: Persistenz über SSH Authorized Keys). Er braucht nur Schreibzugriff auf die Datei, nicht mehr.",
+      "normal": "Jede Zeile gehört zu einem Gerät oder einer Person, die du kennst; der Kommentar am Zeilenende (oft nutzer@rechner) lässt sich zuordnen. Die Datei ist nur für den Eigentümer schreibbar.",
+      "redflag": "Abweichung: eine Zeile, die du keinem Gerät zuordnen kannst; ein Schlüssel ohne Kommentar; eine Zeile mit Optionen wie command= oder from= am Anfang, die du nicht selbst gesetzt hast; Schreibrechte für Gruppe oder alle; eine Datei, die sich geändert hat, ohne dass du etwas getan hast."
+    },
+    "en": {
+      "title": "SSH keys allowed to log in to you (authorized_keys)",
+      "what": "The file lists public SSH keys. Whoever holds the matching private key gets into this account without a password.",
+      "why": "An extra key in the file is access that survives password changes and reboots (technique: persistence via SSH Authorized Keys). It needs only write access to the file, nothing more.",
+      "normal": "Every line belongs to a device or person you know; the comment at the end of the line (often user@machine) can be matched. The file is writable only by its owner.",
+      "redflag": "Deviation: a line you cannot match to a device; a key without a comment; a line starting with options like command= or from= that you did not set yourself; write permission for group or everyone; a file that changed without you doing anything."
+    },
+    "es": {
+      "title": "Llaves SSH autorizadas a entrar en tu cuenta (authorized_keys)",
+      "what": "El archivo lista llaves SSH públicas. Quien tenga la llave privada correspondiente entra en esta cuenta sin contraseña.",
+      "why": "Una llave extra en el archivo es un acceso que sobrevive a cambios de contraseña y reinicios (técnica: persistencia mediante SSH Authorized Keys). Solo necesita acceso de escritura al archivo, nada más.",
+      "normal": "Cada línea pertenece a un dispositivo o persona que conoces; el comentario al final de la línea (a menudo usuario@equipo) se puede asociar. El archivo solo es escribible por su propietario.",
+      "redflag": "Desviación: una línea que no puedes asociar a un dispositivo; una llave sin comentario; una línea que empieza con opciones como command= o from= que no pusiste tú; permiso de escritura para el grupo o todos; un archivo que cambió sin que hicieras nada."
+    },
+    "fix": [
+      {
+        "cmd": "ssh-keygen -lf ~/.ssh/authorized_keys",
+        "de": "zeigt Fingerabdruck und Kommentar jeder Zeile (nur öffentliche Teile); ändert nichts",
+        "en": "shows fingerprint and comment of each line (public parts only); changes nothing",
+        "es": "muestra huella y comentario de cada línea (solo partes públicas); no cambia nada"
+      },
+      {
+        "cmd": "ls -l ~/.ssh/authorized_keys",
+        "de": "zeigt Besitzer und Rechte der Datei; ändert nichts",
+        "en": "shows owner and permissions of the file; changes nothing",
+        "es": "muestra propietario y permisos del archivo; no cambia nada"
+      },
+      {
+        "cmd": "chmod 600 ~/.ssh/authorized_keys && chmod 700 ~/.ssh",
+        "de": "setzt die üblichen Rechte: nur du darfst die Datei und den Ordner lesen und schreiben",
+        "en": "sets the usual permissions: only you may read and write the file and folder",
+        "es": "pone los permisos habituales: solo tú puedes leer y escribir el archivo y la carpeta"
+      },
+      {
+        "cmd": "nano ~/.ssh/authorized_keys",
+        "de": "öffnet die Datei; eine fremde Zeile löschen und speichern entzieht diesem Schlüssel den Zugang",
+        "en": "opens the file; deleting a foreign line and saving removes that key's access",
+        "es": "abre el archivo; borrar una línea ajena y guardar le quita el acceso a esa llave"
+      }
+    ]
+  },
+  {
+    "id": "persist-authorized-keys",
+    "os": "windows",
+    "aliases": [
+      "authorized_keys",
+      "authorized keys",
+      "ssh schlüssel",
+      "ssh key",
+      "llave ssh",
+      "autorisierte schlüssel"
+    ],
+    "source": "MITRE ATT&CK T1098.004 Account Manipulation: SSH Authorized Keys",
+    "de": {
+      "title": "SSH-Schlüssel, die sich bei dir anmelden dürfen (authorized_keys, Windows)",
+      "what": "Wenn der OpenSSH-Server läuft, liest er öffentliche Schlüssel aus %USERPROFILE%\\.ssh\\authorized_keys. Für Konten in der Gruppe Administratoren gilt stattdessen C:\\ProgramData\\ssh\\administrators_authorized_keys.",
+      "why": "Ein zusätzlicher Schlüssel ist ein Zugang, der Passwortwechsel und Neustarts überlebt (Technik: Persistenz über SSH Authorized Keys). Die Admin-Datei wird leicht übersehen, weil sie nicht im Nutzerordner liegt.",
+      "normal": "Ohne OpenSSH-Server sind die Dateien egal. Läuft er, gehört jede Zeile zu einem Gerät oder einer Person, die du kennst, und nur Administratoren und SYSTEM dürfen die Admin-Datei schreiben.",
+      "redflag": "Abweichung: eine Zeile, die du keinem Gerät zuordnen kannst; die Datei administrators_authorized_keys existiert, obwohl du nie SSH auf diesem Rechner eingerichtet hast; Schreibrechte für normale Nutzer auf diese Datei."
+    },
+    "en": {
+      "title": "SSH keys allowed to log in to you (authorized_keys, Windows)",
+      "what": "When the OpenSSH server runs, it reads public keys from %USERPROFILE%\\.ssh\\authorized_keys. For accounts in the Administrators group, C:\\ProgramData\\ssh\\administrators_authorized_keys applies instead.",
+      "why": "An extra key is access that survives password changes and reboots (technique: persistence via SSH Authorized Keys). The admin file is easy to overlook because it is not in the user folder.",
+      "normal": "Without the OpenSSH server the files do not matter. When it runs, every line belongs to a device or person you know, and only Administrators and SYSTEM may write the admin file.",
+      "redflag": "Deviation: a line you cannot match to a device; the file administrators_authorized_keys exists although you never set up SSH on this machine; write permission for normal users on that file."
+    },
+    "es": {
+      "title": "Llaves SSH autorizadas a entrar en tu cuenta (authorized_keys, Windows)",
+      "what": "Cuando el servidor OpenSSH está en marcha, lee llaves públicas de %USERPROFILE%\\.ssh\\authorized_keys. Para cuentas del grupo Administradores vale en su lugar C:\\ProgramData\\ssh\\administrators_authorized_keys.",
+      "why": "Una llave extra es un acceso que sobrevive a cambios de contraseña y reinicios (técnica: persistencia mediante SSH Authorized Keys). El archivo de administradores se pasa por alto fácilmente porque no está en la carpeta del usuario.",
+      "normal": "Sin servidor OpenSSH los archivos no importan. Si está en marcha, cada línea pertenece a un dispositivo o persona que conoces, y solo Administradores y SYSTEM pueden escribir el archivo de administradores.",
+      "redflag": "Desviación: una línea que no puedes asociar a un dispositivo; existe administrators_authorized_keys aunque nunca configuraste SSH en este equipo; permiso de escritura para usuarios normales en ese archivo."
+    },
+    "fix": [
+      {
+        "cmd": "Get-Service sshd",
+        "de": "zeigt, ob der OpenSSH-Server existiert und läuft (PowerShell); ändert nichts",
+        "en": "shows whether the OpenSSH server exists and runs (PowerShell); changes nothing",
+        "es": "muestra si el servidor OpenSSH existe y está en marcha (PowerShell); no cambia nada"
+      },
+      {
+        "cmd": "Get-Content \"$env:USERPROFILE\\.ssh\\authorized_keys\", \"$env:ProgramData\\ssh\\administrators_authorized_keys\"",
+        "de": "zeigt die öffentlichen Schlüssel in beiden Dateien; ändert nichts",
+        "en": "shows the public keys in both files; changes nothing",
+        "es": "muestra las llaves públicas de ambos archivos; no cambia nada"
+      },
+      {
+        "cmd": "Stop-Service sshd; Set-Service sshd -StartupType Disabled",
+        "de": "stoppt den SSH-Server und startet ihn nicht mehr automatisch (Administrator-PowerShell), falls du ihn nicht brauchst",
+        "en": "stops the SSH server and no longer starts it automatically (administrator PowerShell), if you do not need it",
+        "es": "detiene el servidor SSH y deja de arrancarlo automáticamente (PowerShell como administrador), si no lo necesitas"
+      }
+    ]
+  },
+  {
+    "id": "mail-open",
+    "os": "all",
+    "aliases": [
+      "mail port",
+      "mailserver",
+      "smtp",
+      "port 25",
+      "imap",
+      "pop3",
+      "correo abierto"
+    ],
+    "de": {
+      "title": "Mail-Ports offen (SMTP, IMAP, POP3)",
+      "what": "Auf dem Rechner lauscht ein Mail-Dienst auf einer der üblichen Mail-Ports: 25 (SMTP), 465 oder 587 (SMTP-Einreichung), 143 oder 993 (IMAP), 110 oder 995 (POP3), erreichbar von außen.",
+      "why": "Ein offener Mail-Dienst kann zum Versand von Spam und Phishing in deinem Namen missbraucht werden, wenn er Weiterleitung für Fremde erlaubt (Open Relay) oder ein Passwort erraten wird. IMAP und POP3 sind zudem Ziele für Passwort-Raten gegen Postfächer.",
+      "normal": "Ein Rechner, der keine Mail empfängt, hat diese Ports zu. Ein bewusst betriebener Mailserver hat Verschlüsselung (TLS), Anmeldung für Versand und eine Firewall davor.",
+      "redflag": "Abweichung: Port 25 oder 587 offen auf einem Rechner, auf dem du nie Mail eingerichtet hast; ein Dienst, der unverschlüsselt (110, 143) erreichbar ist; ein Mail-Prozess, den du nicht installiert hast."
+    },
+    "en": {
+      "title": "Mail ports open (SMTP, IMAP, POP3)",
+      "what": "A mail service listens on one of the usual mail ports, reachable from outside: 25 (SMTP), 465 or 587 (SMTP submission), 143 or 993 (IMAP), 110 or 995 (POP3).",
+      "why": "An open mail service can be abused to send spam and phishing in your name if it relays for strangers (open relay) or if a password gets guessed. IMAP and POP3 are also targets for password guessing against mailboxes.",
+      "normal": "A machine that does not receive mail has these ports closed. A mail server run on purpose has encryption (TLS), login for sending and a firewall in front.",
+      "redflag": "Deviation: port 25 or 587 open on a machine where you never set up mail; a service reachable unencrypted (110, 143); a mail process you did not install."
+    },
+    "es": {
+      "title": "Puertos de correo abiertos (SMTP, IMAP, POP3)",
+      "what": "Un servicio de correo escucha en uno de los puertos habituales, accesible desde fuera: 25 (SMTP), 465 o 587 (envío SMTP), 143 o 993 (IMAP), 110 o 995 (POP3).",
+      "why": "Un servicio de correo abierto puede usarse para enviar spam y phishing en tu nombre si retransmite para extraños (open relay) o si se adivina una contraseña. IMAP y POP3 son además objetivo de adivinación de contraseñas contra buzones.",
+      "normal": "Un equipo que no recibe correo tiene estos puertos cerrados. Un servidor de correo montado a propósito tiene cifrado (TLS), inicio de sesión para enviar y un cortafuegos delante.",
+      "redflag": "Desviación: puerto 25 o 587 abierto en un equipo donde nunca configuraste correo; un servicio accesible sin cifrar (110, 143); un proceso de correo que no instalaste."
+    },
+    "fix": [
+      {
+        "cmd": "ss -ltnp | grep -E ':(25|110|143|465|587|993|995) '",
+        "de": "Linux: zeigt Mail-Ports und den Prozess dahinter; ändert nichts",
+        "en": "Linux: shows mail ports and the process behind them; changes nothing",
+        "es": "Linux: muestra los puertos de correo y el proceso detrás; no cambia nada"
+      },
+      {
+        "cmd": "lsof -nP -iTCP -sTCP:LISTEN | grep -E ':(25|110|143|465|587|993|995) '",
+        "de": "macOS: zeigt Mail-Ports und den Prozess dahinter; ändert nichts",
+        "en": "macOS: shows mail ports and the process behind them; changes nothing",
+        "es": "macOS: muestra los puertos de correo y el proceso detrás; no cambia nada"
+      },
+      {
+        "cmd": "Get-NetTCPConnection -State Listen | Where-Object { $_.LocalPort -in 25,110,143,465,587,993,995 }",
+        "de": "Windows PowerShell: zeigt Mail-Ports; ändert nichts",
+        "en": "Windows PowerShell: shows mail ports; changes nothing",
+        "es": "Windows PowerShell: muestra puertos de correo; no cambia nada"
+      }
+    ]
+  },
+  {
+    "id": "mail-local-mta",
+    "os": "linux",
+    "aliases": [
+      "postfix",
+      "exim",
+      "sendmail",
+      "mta",
+      "lokaler mailserver",
+      "local mail server"
+    ],
+    "de": {
+      "title": "Lokaler Mail-Dienst (Postfix, Exim, Sendmail)",
+      "what": "Viele Linux-Systeme haben einen kleinen Mail-Dienst (MTA), der Systemmails (Cron-Ausgaben, Warnungen) verschickt. Postfix, Exim und Sendmail sind die üblichen.",
+      "why": "Ein MTA, der nur lokal läuft, ist unauffällig. Bindet er sich an alle Schnittstellen, wird er zum Ziel von Lücken und Open-Relay-Missbrauch (Spam-Versand in deinem Namen).",
+      "normal": "Der MTA lauscht nur auf 127.0.0.1 (bei Postfix: inet_interfaces = loopback-only) und leitet Systemmails an eine feste Adresse oder ein Relais weiter.",
+      "redflag": "Abweichung: der MTA lauscht auf 0.0.0.0:25, obwohl du keine Mail empfangen willst; die Mail-Warteschlange ist voll von Nachrichten, die du nicht kennst; er läuft, obwohl du nie einen Mail-Dienst eingerichtet hast und kein Paket ihn erklärt."
+    },
+    "en": {
+      "title": "Local mail service (Postfix, Exim, Sendmail)",
+      "what": "Many Linux systems have a small mail service (MTA) that sends system mail (cron output, warnings). Postfix, Exim and Sendmail are the usual ones.",
+      "why": "An MTA that runs locally only is unremarkable. Bound to all interfaces it becomes a target for flaws and open-relay abuse (spam sent in your name).",
+      "normal": "The MTA listens on 127.0.0.1 only (Postfix: inet_interfaces = loopback-only) and forwards system mail to a fixed address or a relay.",
+      "redflag": "Deviation: the MTA listens on 0.0.0.0:25 although you do not want to receive mail; the mail queue is full of messages you do not know; it runs although you never set up a mail service and no package explains it."
+    },
+    "es": {
+      "title": "Servicio de correo local (Postfix, Exim, Sendmail)",
+      "what": "Muchos sistemas Linux tienen un pequeño servicio de correo (MTA) que envía correo del sistema (salida de cron, avisos). Postfix, Exim y Sendmail son los habituales.",
+      "why": "Un MTA que solo corre en local pasa desapercibido. Enlazado a todas las interfaces se convierte en objetivo de fallos y de abuso como open relay (spam enviado en tu nombre).",
+      "normal": "El MTA escucha solo en 127.0.0.1 (en Postfix: inet_interfaces = loopback-only) y reenvía el correo del sistema a una dirección fija o a un relé.",
+      "redflag": "Desviación: el MTA escucha en 0.0.0.0:25 aunque no quieres recibir correo; la cola de correo está llena de mensajes que no conoces; corre aunque nunca configuraste un servicio de correo y ningún paquete lo explica."
+    },
+    "fix": [
+      {
+        "cmd": "ss -ltnp | grep ':25 '",
+        "de": "zeigt, ob und auf welcher Adresse der MTA lauscht; ändert nichts",
+        "en": "shows whether and on which address the MTA listens; changes nothing",
+        "es": "muestra si el MTA escucha y en qué dirección; no cambia nada"
+      },
+      {
+        "cmd": "sudo postconf -e 'inet_interfaces = loopback-only' && sudo systemctl restart postfix",
+        "de": "Postfix: lauscht danach nur noch lokal",
+        "en": "Postfix: afterwards it listens locally only",
+        "es": "Postfix: después escucha solo en local"
+      },
+      {
+        "cmd": "sudo systemctl disable --now postfix",
+        "de": "stoppt Postfix und startet es nicht mehr beim Boot, falls du keinen Mail-Dienst brauchst",
+        "en": "stops Postfix and no longer starts it at boot, if you need no mail service",
+        "es": "detiene Postfix y deja de arrancarlo al iniciar, si no necesitas servicio de correo"
+      }
+    ]
+  },
+  {
+    "id": "stale-files",
+    "os": "mac",
+    "aliases": [
+      "alte dateien",
+      "vergessene dateien",
+      "stale files",
+      "old files",
+      "archivos viejos",
+      "downloads aufräumen"
+    ],
+    "source": "MITRE ATT&CK T1005 Data from Local System",
+    "de": {
+      "title": "Alte, vergessene Dateien",
+      "what": "Große Mengen alter Dateien in Downloads, Desktop und Dokumenten: Installer, Backups, Exporte, Kopien von Ausweisen oder Verträgen, alte Passwortlisten.",
+      "why": "Was auf dem Rechner liegt, kann bei einem Zugriff mitgenommen werden, auch wenn du es längst vergessen hast. Angreifer durchsuchen Nutzerordner gezielt nach Dokumenten, Schlüsseln und Zugangsdaten (Technik: Data from Local System, T1005).",
+      "normal": "Wichtiges liegt verschlüsselt oder in einem Passwortmanager. Downloads und Desktop werden regelmäßig leer geräumt. Backups liegen auf einem eigenen Medium, nicht im Nutzerordner.",
+      "redflag": "Abweichung: Dateien wie id_rsa, *.pem, passwords.txt, Wallet-Dateien, Ausweis-Scans oder .sql-Dumps in Nutzerordnern; Installer und Archive, die Jahre alt sind. Hinweis: ‚zuletzt geändert‘ heißt nicht ‚nie benutzt‘."
+    },
+    "en": {
+      "title": "Old, forgotten files",
+      "what": "Large amounts of old files in Downloads, Desktop and Documents: installers, backups, exports, copies of IDs or contracts, old password lists.",
+      "why": "What lies on the machine can be taken during an intrusion, even if you forgot about it long ago. Attackers search user folders deliberately for documents, keys and credentials (technique: Data from Local System, T1005).",
+      "normal": "Important things are encrypted or in a password manager. Downloads and Desktop are cleared regularly. Backups sit on a medium of their own, not in the user folder.",
+      "redflag": "Deviation: files like id_rsa, *.pem, passwords.txt, wallet files, ID scans or .sql dumps in user folders; installers and archives that are years old. Note: ‘last modified’ does not mean ‘never used’."
+    },
+    "es": {
+      "title": "Archivos viejos y olvidados",
+      "what": "Grandes cantidades de archivos viejos en Descargas, Escritorio y Documentos: instaladores, copias de seguridad, exportaciones, copias de documentos de identidad o contratos, listas de contraseñas antiguas.",
+      "why": "Lo que hay en el equipo puede llevarse en una intrusión aunque lo hayas olvidado hace tiempo. Los atacantes buscan a propósito en las carpetas de usuario documentos, llaves y credenciales (técnica: Data from Local System, T1005).",
+      "normal": "Lo importante está cifrado o en un gestor de contraseñas. Descargas y Escritorio se vacían con regularidad. Las copias de seguridad están en un medio aparte, no en la carpeta del usuario.",
+      "redflag": "Desviación: archivos como id_rsa, *.pem, passwords.txt, carteras, escaneos de documentos de identidad o volcados .sql en carpetas de usuario; instaladores y archivos comprimidos de hace años. Nota: «última modificación» no significa «nunca usado»."
+    },
+    "fix": [
+      {
+        "cmd": "find ~/Downloads ~/Desktop ~/Documents -type f -mtime +365 | head -50",
+        "de": "listet die ersten 50 Dateien, die über ein Jahr nicht geändert wurden; ändert nichts",
+        "en": "lists the first 50 files not modified for over a year; changes nothing",
+        "es": "lista los primeros 50 archivos sin modificar desde hace más de un año; no cambia nada"
+      },
+      {
+        "cmd": "mdls -name kMDItemLastUsedDate <datei>",
+        "de": "zeigt, wann Spotlight die Datei zuletzt geöffnet hat (nur wo macOS es weiß); ändert nichts",
+        "en": "shows when Spotlight last saw the file opened (only where macOS knows); changes nothing",
+        "es": "muestra cuándo Spotlight vio abrir el archivo por última vez (solo donde macOS lo sabe); no cambia nada"
+      },
+      {
+        "cmd": "mv ~/Downloads/<datei> ~/.Trash/",
+        "de": "legt die Datei in den Papierkorb; wieder herausholbar, bis du ihn leerst",
+        "en": "moves the file to the Trash; recoverable until you empty it",
+        "es": "mueve el archivo a la Papelera; recuperable hasta que la vacíes"
+      }
+    ]
+  },
+  {
+    "id": "stale-files",
+    "os": "linux",
+    "aliases": [
+      "alte dateien",
+      "vergessene dateien",
+      "stale files",
+      "old files",
+      "archivos viejos",
+      "downloads aufräumen"
+    ],
+    "source": "MITRE ATT&CK T1005 Data from Local System",
+    "de": {
+      "title": "Alte, vergessene Dateien",
+      "what": "Große Mengen alter Dateien in Downloads, Desktop und Dokumenten: Installer, Backups, Exporte, Kopien von Ausweisen oder Verträgen, alte Passwortlisten.",
+      "why": "Was auf dem Rechner liegt, kann bei einem Zugriff mitgenommen werden, auch wenn du es längst vergessen hast. Angreifer durchsuchen Nutzerordner gezielt nach Dokumenten, Schlüsseln und Zugangsdaten (Technik: Data from Local System, T1005).",
+      "normal": "Wichtiges liegt verschlüsselt oder in einem Passwortmanager. Downloads und Desktop werden regelmäßig leer geräumt. Backups liegen auf einem eigenen Medium, nicht im Nutzerordner.",
+      "redflag": "Abweichung: Dateien wie id_rsa, *.pem, passwords.txt, Wallet-Dateien, Ausweis-Scans oder .sql-Dumps in Nutzerordnern; Installer und Archive, die Jahre alt sind. Hinweis: ‚zuletzt geändert‘ heißt nicht ‚nie benutzt‘."
+    },
+    "en": {
+      "title": "Old, forgotten files",
+      "what": "Large amounts of old files in Downloads, Desktop and Documents: installers, backups, exports, copies of IDs or contracts, old password lists.",
+      "why": "What lies on the machine can be taken during an intrusion, even if you forgot about it long ago. Attackers search user folders deliberately for documents, keys and credentials (technique: Data from Local System, T1005).",
+      "normal": "Important things are encrypted or in a password manager. Downloads and Desktop are cleared regularly. Backups sit on a medium of their own, not in the user folder.",
+      "redflag": "Deviation: files like id_rsa, *.pem, passwords.txt, wallet files, ID scans or .sql dumps in user folders; installers and archives that are years old. Note: ‘last modified’ does not mean ‘never used’."
+    },
+    "es": {
+      "title": "Archivos viejos y olvidados",
+      "what": "Grandes cantidades de archivos viejos en Descargas, Escritorio y Documentos: instaladores, copias de seguridad, exportaciones, copias de documentos de identidad o contratos, listas de contraseñas antiguas.",
+      "why": "Lo que hay en el equipo puede llevarse en una intrusión aunque lo hayas olvidado hace tiempo. Los atacantes buscan a propósito en las carpetas de usuario documentos, llaves y credenciales (técnica: Data from Local System, T1005).",
+      "normal": "Lo importante está cifrado o en un gestor de contraseñas. Descargas y Escritorio se vacían con regularidad. Las copias de seguridad están en un medio aparte, no en la carpeta del usuario.",
+      "redflag": "Desviación: archivos como id_rsa, *.pem, passwords.txt, carteras, escaneos de documentos de identidad o volcados .sql en carpetas de usuario; instaladores y archivos comprimidos de hace años. Nota: «última modificación» no significa «nunca usado»."
+    },
+    "fix": [
+      {
+        "cmd": "find ~/Downloads ~/Desktop ~/Documents -type f -mtime +365 | head -50",
+        "de": "listet die ersten 50 Dateien, die über ein Jahr nicht geändert wurden; ändert nichts",
+        "en": "lists the first 50 files not modified for over a year; changes nothing",
+        "es": "lista los primeros 50 archivos sin modificar desde hace más de un año; no cambia nada"
+      },
+      {
+        "cmd": "du -ah ~/Downloads | sort -rh | head -20",
+        "de": "zeigt die 20 größten Einträge in Downloads; ändert nichts",
+        "en": "shows the 20 largest entries in Downloads; changes nothing",
+        "es": "muestra las 20 entradas más grandes de Descargas; no cambia nada"
+      },
+      {
+        "cmd": "rm -i ~/Downloads/<datei>",
+        "de": "löscht die Datei endgültig nach Rückfrage; vorher ansehen, was es ist",
+        "en": "deletes the file for good after a prompt; look at what it is first",
+        "es": "elimina el archivo definitivamente tras preguntar; mira antes qué es"
+      }
+    ]
+  },
+  {
+    "id": "stale-files",
+    "os": "windows",
+    "aliases": [
+      "alte dateien",
+      "vergessene dateien",
+      "stale files",
+      "old files",
+      "archivos viejos",
+      "downloads aufräumen"
+    ],
+    "source": "MITRE ATT&CK T1005 Data from Local System",
+    "de": {
+      "title": "Alte, vergessene Dateien",
+      "what": "Große Mengen alter Dateien in Downloads, Desktop und Dokumenten: Installer, Backups, Exporte, Kopien von Ausweisen oder Verträgen, alte Passwortlisten.",
+      "why": "Was auf dem Rechner liegt, kann bei einem Zugriff mitgenommen werden, auch wenn du es längst vergessen hast. Angreifer durchsuchen Nutzerordner gezielt nach Dokumenten, Schlüsseln und Zugangsdaten (Technik: Data from Local System, T1005).",
+      "normal": "Wichtiges liegt verschlüsselt oder in einem Passwortmanager. Downloads und Desktop werden regelmäßig leer geräumt. Backups liegen auf einem eigenen Medium, nicht im Nutzerordner.",
+      "redflag": "Abweichung: Dateien wie id_rsa, *.pem, passwords.txt, Wallet-Dateien, Ausweis-Scans oder .sql-Dumps in Nutzerordnern; Installer und Archive, die Jahre alt sind. Hinweis: ‚zuletzt geändert‘ heißt nicht ‚nie benutzt‘."
+    },
+    "en": {
+      "title": "Old, forgotten files",
+      "what": "Large amounts of old files in Downloads, Desktop and Documents: installers, backups, exports, copies of IDs or contracts, old password lists.",
+      "why": "What lies on the machine can be taken during an intrusion, even if you forgot about it long ago. Attackers search user folders deliberately for documents, keys and credentials (technique: Data from Local System, T1005).",
+      "normal": "Important things are encrypted or in a password manager. Downloads and Desktop are cleared regularly. Backups sit on a medium of their own, not in the user folder.",
+      "redflag": "Deviation: files like id_rsa, *.pem, passwords.txt, wallet files, ID scans or .sql dumps in user folders; installers and archives that are years old. Note: ‘last modified’ does not mean ‘never used’."
+    },
+    "es": {
+      "title": "Archivos viejos y olvidados",
+      "what": "Grandes cantidades de archivos viejos en Descargas, Escritorio y Documentos: instaladores, copias de seguridad, exportaciones, copias de documentos de identidad o contratos, listas de contraseñas antiguas.",
+      "why": "Lo que hay en el equipo puede llevarse en una intrusión aunque lo hayas olvidado hace tiempo. Los atacantes buscan a propósito en las carpetas de usuario documentos, llaves y credenciales (técnica: Data from Local System, T1005).",
+      "normal": "Lo importante está cifrado o en un gestor de contraseñas. Descargas y Escritorio se vacían con regularidad. Las copias de seguridad están en un medio aparte, no en la carpeta del usuario.",
+      "redflag": "Desviación: archivos como id_rsa, *.pem, passwords.txt, carteras, escaneos de documentos de identidad o volcados .sql en carpetas de usuario; instaladores y archivos comprimidos de hace años. Nota: «última modificación» no significa «nunca usado»."
+    },
+    "fix": [
+      {
+        "cmd": "Get-ChildItem \"$env:USERPROFILE\\Downloads\",\"$env:USERPROFILE\\Desktop\",\"$env:USERPROFILE\\Documents\" -File -Recurse | Where-Object { $_.LastWriteTime -lt (Get-Date).AddDays(-365) } | Select-Object -First 50 FullName, LastWriteTime",
+        "de": "listet die ersten 50 Dateien, die über ein Jahr nicht geändert wurden (PowerShell); ändert nichts",
+        "en": "lists the first 50 files not modified for over a year (PowerShell); changes nothing",
+        "es": "lista los primeros 50 archivos sin modificar desde hace más de un año (PowerShell); no cambia nada"
+      },
+      {
+        "cmd": "Remove-Item \"$env:USERPROFILE\\Downloads\\<datei>\" -Confirm",
+        "de": "löscht die Datei nach Rückfrage endgültig (am Papierkorb vorbei); vorher ansehen, was es ist",
+        "en": "deletes the file for good after a prompt (bypasses the Recycle Bin); look at what it is first",
+        "es": "elimina el archivo definitivamente tras preguntar (sin pasar por la Papelera); mira antes qué es"
+      }
+    ]
+  },
+  {
+    "id": "account-guest",
+    "os": "mac",
+    "aliases": [
+      "gastkonto",
+      "gastbenutzer",
+      "guest user",
+      "guest account",
+      "cuenta de invitado",
+      "invitado"
+    ],
+    "source": "MITRE ATT&CK T1078.001 Valid Accounts: Default Accounts",
+    "de": {
+      "title": "Gastbenutzer",
+      "what": "macOS kann ein Gastkonto anbieten, mit dem sich jemand ohne Passwort am Anmeldefenster anmelden kann. Die Daten des Gasts werden beim Abmelden gelöscht.",
+      "why": "Ein Konto ohne Passwort ist ein Zugang für jeden, der am Gerät sitzt oder dessen Dienste erreicht (Technik: Valid Accounts: Default Accounts).",
+      "normal": "Der Gastbenutzer ist aus, solange niemand ihn braucht.",
+      "redflag": "Abweichung: Gastbenutzer ist eingeschaltet, obwohl du ihn nie bewusst aktiviert hast, besonders auf einem Gerät, das unbeaufsichtigt steht."
+    },
+    "en": {
+      "title": "Guest user",
+      "what": "macOS can offer a guest account that anyone can log in to from the login window without a password. The guest's data is deleted at logout.",
+      "why": "An account without a password is access for anyone sitting at the device or reaching its services (technique: Valid Accounts: Default Accounts).",
+      "normal": "The guest user is off as long as nobody needs it.",
+      "redflag": "Deviation: the guest user is on although you never deliberately enabled it, especially on a device left unattended."
+    },
+    "es": {
+      "title": "Usuario invitado",
+      "what": "macOS puede ofrecer una cuenta de invitado en la que cualquiera entra desde la ventana de inicio de sesión sin contraseña. Los datos del invitado se borran al cerrar sesión.",
+      "why": "Una cuenta sin contraseña es un acceso para cualquiera que esté ante el equipo o alcance sus servicios (técnica: Valid Accounts: Default Accounts).",
+      "normal": "El usuario invitado está desactivado mientras nadie lo necesite.",
+      "redflag": "Desviación: el usuario invitado está activado aunque nunca lo activaste a propósito, sobre todo en un equipo desatendido."
+    },
+    "fix": [
+      {
+        "cmd": "defaults read /Library/Preferences/com.apple.loginwindow GuestEnabled",
+        "de": "liest, ob der Gastbenutzer an ist (1) oder aus (0); ändert nichts",
+        "en": "reads whether the guest user is on (1) or off (0); changes nothing",
+        "es": "lee si el usuario invitado está activado (1) o no (0); no cambia nada"
+      },
+      {
+        "cmd": "sudo defaults write /Library/Preferences/com.apple.loginwindow GuestEnabled -bool false",
+        "de": "schaltet den Gastbenutzer aus; alternativ in Systemeinstellungen, Benutzer:innen & Gruppen",
+        "en": "turns the guest user off; alternatively in System Settings, Users & Groups",
+        "es": "desactiva el usuario invitado; alternativamente en Ajustes del Sistema, Usuarios y grupos"
+      }
+    ]
+  },
+  {
+    "id": "account-guest",
+    "os": "windows",
+    "aliases": [
+      "gastkonto",
+      "guest account",
+      "guest user",
+      "cuenta de invitado",
+      "invitado"
+    ],
+    "source": "MITRE ATT&CK T1078.001 Valid Accounts: Default Accounts",
+    "de": {
+      "title": "Gastkonto",
+      "what": "Windows hat ein eingebautes Konto namens Gast (Guest). Es ist in aktuellen Windows-Versionen normalerweise deaktiviert.",
+      "why": "Ein aktiviertes Gastkonto ist ein Zugang ohne eigene Zugangsdaten (Technik: Valid Accounts: Default Accounts).",
+      "normal": "Das Gastkonto ist deaktiviert.",
+      "redflag": "Abweichung: Get-LocalUser zeigt Guest mit Enabled = True."
+    },
+    "en": {
+      "title": "Guest account",
+      "what": "Windows has a built-in account named Guest. In current Windows versions it is normally disabled.",
+      "why": "An enabled guest account is access without credentials of its own (technique: Valid Accounts: Default Accounts).",
+      "normal": "The guest account is disabled.",
+      "redflag": "Deviation: Get-LocalUser shows Guest with Enabled = True."
+    },
+    "es": {
+      "title": "Cuenta de invitado",
+      "what": "Windows tiene una cuenta integrada llamada Invitado (Guest). En las versiones actuales de Windows normalmente está desactivada.",
+      "why": "Una cuenta de invitado activada es un acceso sin credenciales propias (técnica: Valid Accounts: Default Accounts).",
+      "normal": "La cuenta de invitado está desactivada.",
+      "redflag": "Desviación: Get-LocalUser muestra Guest con Enabled = True."
+    },
+    "fix": [
+      {
+        "cmd": "Get-LocalUser -Name Guest | Select-Object Name, Enabled",
+        "de": "zeigt, ob das Gastkonto aktiv ist (PowerShell); ändert nichts",
+        "en": "shows whether the guest account is enabled (PowerShell); changes nothing",
+        "es": "muestra si la cuenta de invitado está activa (PowerShell); no cambia nada"
+      },
+      {
+        "cmd": "Disable-LocalUser -Name Guest",
+        "de": "deaktiviert das Gastkonto (Administrator-PowerShell)",
+        "en": "disables the guest account (administrator PowerShell)",
+        "es": "desactiva la cuenta de invitado (PowerShell como administrador)"
+      }
+    ]
+  },
+  {
+    "id": "account-remote-login",
+    "os": "mac",
+    "aliases": [
+      "remote login",
+      "entfernte anmeldung",
+      "ssh server",
+      "remote desktop",
+      "rdp",
+      "sesión remota",
+      "acceso remoto"
+    ],
+    "source": "MITRE ATT&CK T1021.004 Remote Services: SSH",
+    "de": {
+      "title": "Entfernte Anmeldung (SSH) an",
+      "what": "‚Entfernte Anmeldung‘ in den Systemeinstellungen schaltet den SSH-Server von macOS ein. Dann kann sich jeder Nutzer, den du freigibst, per Netzwerk am Terminal anmelden.",
+      "why": "Ein erreichbarer Anmeldedienst ist das Ziel für Passwort-Raten und gestohlene Zugangsdaten (Technik: Remote Services: SSH, T1021.004).",
+      "normal": "Aus, wenn du dich nie von einem anderen Gerät anmeldest. Wenn an: nur bestimmte Nutzer freigegeben, Anmeldung mit Schlüssel statt Passwort.",
+      "redflag": "Abweichung: an, obwohl du es nie eingeschaltet hast; ‚Allen Nutzer:innen den Zugriff erlauben‘ statt einer kurzen Liste."
+    },
+    "en": {
+      "title": "Remote Login (SSH) on",
+      "what": "‘Remote Login’ in System Settings turns on the macOS SSH server. Then every user you allow can log in at the terminal over the network.",
+      "why": "A reachable login service is the target for password guessing and stolen credentials (technique: Remote Services: SSH, T1021.004).",
+      "normal": "Off if you never log in from another device. If on: only chosen users allowed, login with a key instead of a password.",
+      "redflag": "Deviation: on although you never turned it on; ‘Allow access for all users’ instead of a short list."
+    },
+    "es": {
+      "title": "Inicio de sesión remoto (SSH) activado",
+      "what": "«Sesión remota» en Ajustes del Sistema activa el servidor SSH de macOS. Entonces cada usuario que permitas puede entrar en la terminal por la red.",
+      "why": "Un servicio de acceso alcanzable es el objetivo de la adivinación de contraseñas y de credenciales robadas (técnica: Remote Services: SSH, T1021.004).",
+      "normal": "Desactivado si nunca entras desde otro dispositivo. Si está activado: solo usuarios elegidos, acceso con llave en lugar de contraseña.",
+      "redflag": "Desviación: activado aunque nunca lo activaste; «Permitir acceso a todos los usuarios» en lugar de una lista corta."
+    },
+    "fix": [
+      {
+        "cmd": "sudo systemsetup -getremotelogin",
+        "de": "zeigt, ob Remote Login an oder aus ist; ändert nichts",
+        "en": "shows whether Remote Login is on or off; changes nothing",
+        "es": "muestra si Remote Login está activado o no; no cambia nada"
+      },
+      {
+        "cmd": "sudo systemsetup -setremotelogin off",
+        "de": "schaltet den SSH-Server aus",
+        "en": "turns the SSH server off",
+        "es": "desactiva el servidor SSH"
+      }
+    ]
+  },
+  {
+    "id": "account-remote-login",
+    "os": "linux",
+    "aliases": [
+      "remote login",
+      "entfernte anmeldung",
+      "ssh server",
+      "remote desktop",
+      "rdp",
+      "sesión remota",
+      "acceso remoto"
+    ],
+    "source": "MITRE ATT&CK T1021.004 Remote Services: SSH",
+    "de": {
+      "title": "SSH-Server läuft",
+      "what": "Der OpenSSH-Server (Dienst ssh oder sshd) nimmt Anmeldungen über das Netzwerk an, meist auf Port 22.",
+      "why": "Ein erreichbarer SSH-Server ist das Ziel für Passwort-Raten und gestohlene Schlüssel (Technik: Remote Services: SSH, T1021.004).",
+      "normal": "Läuft nur, wenn du dich per SSH anmeldest. In /etc/ssh/sshd_config: PasswordAuthentication no, PermitRootLogin no oder prohibit-password, nur Schlüssel.",
+      "redflag": "Abweichung: der Dienst läuft, obwohl du nie SSH brauchst; PasswordAuthentication yes zusammen mit Port 22 für alle erreichbar; PermitRootLogin yes."
+    },
+    "en": {
+      "title": "SSH server running",
+      "what": "The OpenSSH server (service ssh or sshd) accepts logins over the network, usually on port 22.",
+      "why": "A reachable SSH server is the target for password guessing and stolen keys (technique: Remote Services: SSH, T1021.004).",
+      "normal": "Runs only if you log in over SSH. In /etc/ssh/sshd_config: PasswordAuthentication no, PermitRootLogin no or prohibit-password, keys only.",
+      "redflag": "Deviation: the service runs although you never need SSH; PasswordAuthentication yes with port 22 reachable by everyone; PermitRootLogin yes."
+    },
+    "es": {
+      "title": "Servidor SSH en marcha",
+      "what": "El servidor OpenSSH (servicio ssh o sshd) acepta inicios de sesión por la red, normalmente en el puerto 22.",
+      "why": "Un servidor SSH accesible es el objetivo de la adivinación de contraseñas y de llaves robadas (técnica: Remote Services: SSH, T1021.004).",
+      "normal": "Corre solo si entras por SSH. En /etc/ssh/sshd_config: PasswordAuthentication no, PermitRootLogin no o prohibit-password, solo llaves.",
+      "redflag": "Desviación: el servicio corre aunque nunca necesitas SSH; PasswordAuthentication yes con el puerto 22 accesible para todos; PermitRootLogin yes."
+    },
+    "fix": [
+      {
+        "cmd": "systemctl is-active ssh sshd",
+        "de": "zeigt, ob der Dienst läuft (der Name ist ssh bei Debian/Ubuntu, sshd bei Fedora/RHEL); ändert nichts",
+        "en": "shows whether the service runs (the name is ssh on Debian/Ubuntu, sshd on Fedora/RHEL); changes nothing",
+        "es": "muestra si el servicio corre (el nombre es ssh en Debian/Ubuntu, sshd en Fedora/RHEL); no cambia nada"
+      },
+      {
+        "cmd": "sudo sshd -T | grep -Ei 'passwordauthentication|permitrootlogin'",
+        "de": "zeigt die wirksamen Einstellungen; ändert nichts",
+        "en": "shows the effective settings; changes nothing",
+        "es": "muestra los ajustes efectivos; no cambia nada"
+      },
+      {
+        "cmd": "sudo systemctl disable --now ssh",
+        "de": "stoppt den SSH-Server und startet ihn nicht mehr beim Boot (bei Fedora/RHEL: sshd)",
+        "en": "stops the SSH server and no longer starts it at boot (on Fedora/RHEL: sshd)",
+        "es": "detiene el servidor SSH y deja de arrancarlo al iniciar (en Fedora/RHEL: sshd)"
+      }
+    ]
+  },
+  {
+    "id": "account-remote-login",
+    "os": "windows",
+    "aliases": [
+      "remote login",
+      "entfernte anmeldung",
+      "ssh server",
+      "remote desktop",
+      "rdp",
+      "sesión remota",
+      "acceso remoto"
+    ],
+    "source": "MITRE ATT&CK T1021.001 Remote Services: Remote Desktop Protocol; T1021.004 Remote Services: SSH",
+    "de": {
+      "title": "Remote-Zugang (Remote Desktop, SSH) an",
+      "what": "Windows kann Anmeldungen über das Netzwerk annehmen: Remote Desktop (RDP, Port 3389) und optional der OpenSSH-Server (Dienst sshd, Port 22).",
+      "why": "Ein erreichbarer Remote-Zugang ist das Ziel für Passwort-Raten und gestohlene Zugangsdaten (Technik: Remote Services: Remote Desktop Protocol, T1021.001, und SSH, T1021.004).",
+      "normal": "Aus, wenn du den Rechner nur direkt benutzt. Wenn an: nur über VPN erreichbar, Netzwerkebenen-Authentifizierung aktiv, nur bestimmte Nutzer erlaubt.",
+      "redflag": "Abweichung: RDP an, obwohl du nie von außen auf den Rechner willst; Port 3389 oder 22 direkt aus dem Internet erreichbar; der Dienst sshd läuft, ohne dass du ihn installiert hast."
+    },
+    "en": {
+      "title": "Remote access (Remote Desktop, SSH) on",
+      "what": "Windows can accept logins over the network: Remote Desktop (RDP, port 3389) and optionally the OpenSSH server (service sshd, port 22).",
+      "why": "A reachable remote access is the target for password guessing and stolen credentials (technique: Remote Services: Remote Desktop Protocol, T1021.001, and SSH, T1021.004).",
+      "normal": "Off if you only use the machine directly. If on: reachable only through a VPN, Network Level Authentication active, only chosen users allowed.",
+      "redflag": "Deviation: RDP on although you never want to reach the machine from outside; port 3389 or 22 directly reachable from the internet; the service sshd runs without you having installed it."
+    },
+    "es": {
+      "title": "Acceso remoto (Escritorio remoto, SSH) activado",
+      "what": "Windows puede aceptar inicios de sesión por la red: Escritorio remoto (RDP, puerto 3389) y opcionalmente el servidor OpenSSH (servicio sshd, puerto 22).",
+      "why": "Un acceso remoto accesible es el objetivo de la adivinación de contraseñas y de credenciales robadas (técnica: Remote Services: Remote Desktop Protocol, T1021.001, y SSH, T1021.004).",
+      "normal": "Desactivado si solo usas el equipo directamente. Si está activado: accesible solo por VPN, autenticación a nivel de red activa, solo usuarios elegidos.",
+      "redflag": "Desviación: RDP activado aunque nunca quieres entrar al equipo desde fuera; puerto 3389 o 22 accesible directamente desde internet; el servicio sshd corre sin que lo hayas instalado."
+    },
+    "fix": [
+      {
+        "cmd": "(Get-ItemProperty 'HKLM:\\System\\CurrentControlSet\\Control\\Terminal Server').fDenyTSConnections",
+        "de": "0 heißt: Remote Desktop ist an, 1: aus (PowerShell); ändert nichts",
+        "en": "0 means Remote Desktop is on, 1 off (PowerShell); changes nothing",
+        "es": "0 significa Escritorio remoto activado, 1 desactivado (PowerShell); no cambia nada"
+      },
+      {
+        "cmd": "Get-Service sshd",
+        "de": "zeigt, ob der OpenSSH-Server existiert und läuft; ändert nichts",
+        "en": "shows whether the OpenSSH server exists and runs; changes nothing",
+        "es": "muestra si el servidor OpenSSH existe y está en marcha; no cambia nada"
+      },
+      {
+        "cmd": "Set-ItemProperty 'HKLM:\\System\\CurrentControlSet\\Control\\Terminal Server' -Name fDenyTSConnections -Value 1",
+        "de": "schaltet Remote Desktop aus (Administrator-PowerShell)",
+        "en": "turns Remote Desktop off (administrator PowerShell)",
+        "es": "desactiva Escritorio remoto (PowerShell como administrador)"
+      },
+      {
+        "cmd": "Stop-Service sshd; Set-Service sshd -StartupType Disabled",
+        "de": "stoppt den SSH-Server und startet ihn nicht mehr automatisch (Administrator-PowerShell)",
+        "en": "stops the SSH server and no longer starts it automatically (administrator PowerShell)",
+        "es": "detiene el servidor SSH y deja de arrancarlo automáticamente (PowerShell como administrador)"
+      }
+    ]
+  },
+  {
+    "id": "account-extra-admin",
+    "os": "mac",
+    "aliases": [
+      "administrator",
+      "admin konto",
+      "extra admin",
+      "sudo",
+      "admin account",
+      "administrador adicional"
+    ],
+    "source": "MITRE ATT&CK T1136.001 Create Account: Local Account",
+    "de": {
+      "title": "Zusätzliche Administratoren",
+      "what": "Konten mit Administrator- oder sudo-Rechten dürfen Programme installieren, Dienste ändern und andere Konten verwalten.",
+      "why": "Ein neues Konto mit Administratorrechten ist ein Zugang, der Passwortwechsel an deinem eigenen Konto überlebt (Technik: Persistenz über Create Account: Local Account, T1136.001).",
+      "normal": "Nur die Konten, die du selbst eingerichtet hast und tatsächlich brauchst. Für den Alltag ein Konto ohne Adminrechte.",
+      "redflag": "Abweichung: ein Administrator, den du nicht angelegt hast; ein Konto mit unauffälligem Namen (wie ein Systemdienst); ein Konto, das erst kürzlich entstanden ist."
+    },
+    "en": {
+      "title": "Extra administrators",
+      "what": "Accounts with administrator or sudo rights may install programs, change services and manage other accounts.",
+      "why": "A new account with administrator rights is access that survives a password change on your own account (technique: persistence via Create Account: Local Account, T1136.001).",
+      "normal": "Only the accounts you set up yourself and actually need. A non-admin account for daily use.",
+      "redflag": "Deviation: an administrator you did not create; an account with an inconspicuous name (like a system service); an account that appeared only recently."
+    },
+    "es": {
+      "title": "Administradores adicionales",
+      "what": "Las cuentas con derechos de administrador o sudo pueden instalar programas, cambiar servicios y gestionar otras cuentas.",
+      "why": "Una cuenta nueva con derechos de administrador es un acceso que sobrevive a un cambio de contraseña en tu propia cuenta (técnica: persistencia mediante Create Account: Local Account, T1136.001).",
+      "normal": "Solo las cuentas que configuraste tú y que realmente necesitas. Para el día a día, una cuenta sin derechos de administrador.",
+      "redflag": "Desviación: un administrador que no creaste; una cuenta con un nombre discreto (como un servicio del sistema); una cuenta que apareció hace poco."
+    },
+    "fix": [
+      {
+        "cmd": "dscl . -read /Groups/admin GroupMembership",
+        "de": "listet die Mitglieder der Gruppe admin; ändert nichts",
+        "en": "lists the members of the admin group; changes nothing",
+        "es": "lista los miembros del grupo admin; no cambia nada"
+      },
+      {
+        "cmd": "sudo dseditgroup -o edit -d <nutzer> -t user admin",
+        "de": "entfernt das Konto aus der Gruppe admin; das Konto selbst bleibt",
+        "en": "removes the account from the admin group; the account itself stays",
+        "es": "quita la cuenta del grupo admin; la cuenta en sí permanece"
+      }
+    ]
+  },
+  {
+    "id": "account-extra-admin",
+    "os": "linux",
+    "aliases": [
+      "administrator",
+      "admin konto",
+      "extra admin",
+      "sudo",
+      "admin account",
+      "administrador adicional"
+    ],
+    "source": "MITRE ATT&CK T1136.001 Create Account: Local Account",
+    "de": {
+      "title": "Zusätzliche Administratoren",
+      "what": "Konten mit Administrator- oder sudo-Rechten dürfen Programme installieren, Dienste ändern und andere Konten verwalten.",
+      "why": "Ein neues Konto mit Administratorrechten ist ein Zugang, der Passwortwechsel an deinem eigenen Konto überlebt (Technik: Persistenz über Create Account: Local Account, T1136.001).",
+      "normal": "Nur die Konten, die du selbst eingerichtet hast und tatsächlich brauchst. Für den Alltag ein Konto ohne Adminrechte.",
+      "redflag": "Abweichung: ein Administrator, den du nicht angelegt hast; ein Konto mit unauffälligem Namen (wie ein Systemdienst); ein Konto, das erst kürzlich entstanden ist."
+    },
+    "en": {
+      "title": "Extra administrators",
+      "what": "Accounts with administrator or sudo rights may install programs, change services and manage other accounts.",
+      "why": "A new account with administrator rights is access that survives a password change on your own account (technique: persistence via Create Account: Local Account, T1136.001).",
+      "normal": "Only the accounts you set up yourself and actually need. A non-admin account for daily use.",
+      "redflag": "Deviation: an administrator you did not create; an account with an inconspicuous name (like a system service); an account that appeared only recently."
+    },
+    "es": {
+      "title": "Administradores adicionales",
+      "what": "Las cuentas con derechos de administrador o sudo pueden instalar programas, cambiar servicios y gestionar otras cuentas.",
+      "why": "Una cuenta nueva con derechos de administrador es un acceso que sobrevive a un cambio de contraseña en tu propia cuenta (técnica: persistencia mediante Create Account: Local Account, T1136.001).",
+      "normal": "Solo las cuentas que configuraste tú y que realmente necesitas. Para el día a día, una cuenta sin derechos de administrador.",
+      "redflag": "Desviación: un administrador que no creaste; una cuenta con un nombre discreto (como un servicio del sistema); una cuenta que apareció hace poco."
+    },
+    "fix": [
+      {
+        "cmd": "getent group sudo wheel",
+        "de": "listet die Mitglieder der Gruppen sudo (Debian/Ubuntu) und wheel (Fedora/RHEL); ändert nichts",
+        "en": "lists the members of the groups sudo (Debian/Ubuntu) and wheel (Fedora/RHEL); changes nothing",
+        "es": "lista los miembros de los grupos sudo (Debian/Ubuntu) y wheel (Fedora/RHEL); no cambia nada"
+      },
+      {
+        "cmd": "sudo grep -r . /etc/sudoers.d/",
+        "de": "zeigt Einträge, die zusätzliche sudo-Rechte vergeben; ändert nichts",
+        "en": "shows entries that grant extra sudo rights; changes nothing",
+        "es": "muestra entradas que dan derechos sudo adicionales; no cambia nada"
+      },
+      {
+        "cmd": "sudo gpasswd -d <nutzer> sudo",
+        "de": "entfernt das Konto aus der Gruppe sudo (bei Fedora/RHEL: wheel); das Konto selbst bleibt",
+        "en": "removes the account from the sudo group (on Fedora/RHEL: wheel); the account itself stays",
+        "es": "quita la cuenta del grupo sudo (en Fedora/RHEL: wheel); la cuenta en sí permanece"
+      }
+    ]
+  },
+  {
+    "id": "account-extra-admin",
+    "os": "windows",
+    "aliases": [
+      "administrator",
+      "admin konto",
+      "extra admin",
+      "sudo",
+      "admin account",
+      "administrador adicional"
+    ],
+    "source": "MITRE ATT&CK T1136.001 Create Account: Local Account",
+    "de": {
+      "title": "Zusätzliche Administratoren",
+      "what": "Konten mit Administrator- oder sudo-Rechten dürfen Programme installieren, Dienste ändern und andere Konten verwalten.",
+      "why": "Ein neues Konto mit Administratorrechten ist ein Zugang, der Passwortwechsel an deinem eigenen Konto überlebt (Technik: Persistenz über Create Account: Local Account, T1136.001).",
+      "normal": "Nur die Konten, die du selbst eingerichtet hast und tatsächlich brauchst. Für den Alltag ein Konto ohne Adminrechte.",
+      "redflag": "Abweichung: ein Administrator, den du nicht angelegt hast; ein Konto mit unauffälligem Namen (wie ein Systemdienst); ein Konto, das erst kürzlich entstanden ist."
+    },
+    "en": {
+      "title": "Extra administrators",
+      "what": "Accounts with administrator or sudo rights may install programs, change services and manage other accounts.",
+      "why": "A new account with administrator rights is access that survives a password change on your own account (technique: persistence via Create Account: Local Account, T1136.001).",
+      "normal": "Only the accounts you set up yourself and actually need. A non-admin account for daily use.",
+      "redflag": "Deviation: an administrator you did not create; an account with an inconspicuous name (like a system service); an account that appeared only recently."
+    },
+    "es": {
+      "title": "Administradores adicionales",
+      "what": "Las cuentas con derechos de administrador o sudo pueden instalar programas, cambiar servicios y gestionar otras cuentas.",
+      "why": "Una cuenta nueva con derechos de administrador es un acceso que sobrevive a un cambio de contraseña en tu propia cuenta (técnica: persistencia mediante Create Account: Local Account, T1136.001).",
+      "normal": "Solo las cuentas que configuraste tú y que realmente necesitas. Para el día a día, una cuenta sin derechos de administrador.",
+      "redflag": "Desviación: un administrador que no creaste; una cuenta con un nombre discreto (como un servicio del sistema); una cuenta que apareció hace poco."
+    },
+    "fix": [
+      {
+        "cmd": "Get-LocalGroupMember -SID S-1-5-32-544",
+        "de": "listet die Mitglieder der Administratoren-Gruppe, unabhängig von der Windows-Sprache (PowerShell); ändert nichts",
+        "en": "lists the members of the Administrators group, independent of the Windows language (PowerShell); changes nothing",
+        "es": "lista los miembros del grupo de administradores, independientemente del idioma de Windows (PowerShell); no cambia nada"
+      },
+      {
+        "cmd": "Get-LocalUser | Select-Object Name, Enabled, LastLogon",
+        "de": "listet alle lokalen Konten mit letzter Anmeldung; ändert nichts",
+        "en": "lists all local accounts with last logon; changes nothing",
+        "es": "lista todas las cuentas locales con el último inicio de sesión; no cambia nada"
+      },
+      {
+        "cmd": "Remove-LocalGroupMember -Group Administrators -Member <name>",
+        "de": "nimmt das Konto aus der Gruppe Administratoren (Administrator-PowerShell; auf deutschem Windows: -Group Administratoren); das Konto selbst bleibt",
+        "en": "removes the account from the Administrators group (administrator PowerShell); the account itself stays",
+        "es": "quita la cuenta del grupo Administradores (PowerShell como administrador); la cuenta en sí permanece"
+      }
+    ]
+  }
+]

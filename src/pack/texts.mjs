@@ -1,0 +1,88 @@
+// Texts for licenses and packs (de/en/es), including the reasons a pack is refused.
+import { lang } from "../i18n.mjs";
+import { loc } from "../checks/loc.mjs";
+import { BUY_URL } from "./install.mjs";
+
+const nums = (xs) => xs.map((p) => (typeof p === "number" ? p : p.serial)).join(", ");
+// the titles of some rules in the person's language, at most n of them, then "... +k"
+export const ruleTitles = (rules, n = 6) => rules.slice(0, n).map((r) => loc(r).title).concat(rules.length > n ? ["… +" + (rules.length - n)] : []);
+
+const X = {
+  de: {
+    badge: " AKTUALISIERT ",
+    packLine: (packs, n) => `${packs.length} ${packs.length === 1 ? "neues Pack" : "neue Packs"}: Nr. ${nums(packs)} · jetzt ${n} Prüfungen`,
+    added: "neu", changed: "geändert",
+    next: "Die neuen Regeln laufen ab dem nächsten „prüf alles“. Ältere Packs bleiben erhalten.",
+    nothingNew: (have) => `Du hast schon alle deine Packs${have.length ? " (Nr. " + nums(have) + ")" : ""}. Weitere: ${BUY_URL}`,
+    expiredPack: (l) => `${l} ist abgelaufen und gilt nicht mehr. Für neue Regeln brauchst du einen neuen Token.`,
+    noLicense: "Noch keine Lizenz. Den Token bekommst du hier: " + BUY_URL + " — dann tipp: lizenz <token> (oder füg ihn einfach ein).",
+    licenseAsk: "Ich speichere deinen Token in ~/.dante/license (nur für dich lesbar). Ja?",
+    licenseSaved: "Token gespeichert. Tipp „aktualisier“, dann hole ich deine Packs.",
+    licenseBad: "Das sieht nicht nach einem Dante-Token aus. Er beginnt mit dnt_ und ist 36 Zeichen lang.",
+    askFetch: "Ich hole jetzt deine Packs von unserem Server. Ein Aufruf, nur dein Token geht raus, sonst nichts:",
+    go: "Ja?", declined: "Gut, nichts geholt.", loading: "hole die Packs …",
+    curlMissing: "curl fehlt auf diesem Rechner. Lade die Packs im Browser und tipp: pack <datei>",
+    unknownTok: `Dieser Token ist unbekannt (oder wurde ersetzt). Neuen holen: ${BUY_URL} → „Token verloren?“`,
+    revoked: "Diese Lizenz ist gesperrt. Schreib an info@nm-streetwear.space.", tooMany: "Heute schon oft geholt. Versuch es morgen wieder.",
+    net: "Keine Verbindung zum Server. Nichts geändert.", other: (c) => `Der Server antwortete mit ${c}. Nichts geändert.`, badBody: "Die Antwort des Servers war unlesbar. Nichts geändert.",
+    rejected: (r) => `Das Pack wurde abgelehnt: ${X.de.reason(r.code, r.detail)}. Nichts geändert.`,
+    ignored: (f, why) => `${f} ignoriert: ${why}`,
+    reason: (c, d) => ({ too_big: "zu groß", bad_json: "kein gültiges JSON", format: "unbekanntes Format", no_sig: "keine Signatur", signature: "Signatur stimmt nicht", serial: "Seriennummer fehlt", no_expiry: "Ablaufdatum fehlt", expired: "abgelaufen am " + d, needs: "braucht Dante ab Version " + d + " — bitte „npx dante-watch@latest“, dann noch einmal „aktualisier“", fields: "ungültiges Feld", rule: "ungültige Regel (" + d + ")", unreadable: "nicht lesbar" }[c] || c),
+    noFile: (f) => `Datei nicht gefunden: ${f}`, packWhich: "Welche Datei? Tipp: pack <datei>",
+    on: (packs) => `Packs aktiv: Nr. ${nums(packs)}`,
+    status: (packs, n) => (packs.length ? `Packs aktiv: Nr. ${nums(packs)} (neuester Stand ${packs[packs.length - 1].issued}) · ${n} Prüfungen` : `Nur der eingebaute Stand · ${n} Prüfungen. Frische Regeln: „aktualisier“.`),
+    howToken: "Hast du schon einen Token? Dann füg ihn hier ein (dnt_…). Noch keinen? " + BUY_URL,
+  },
+  en: {
+    badge: " UPDATED ",
+    packLine: (packs, n) => `${packs.length} new ${packs.length === 1 ? "pack" : "packs"}: no. ${nums(packs)} · now ${n} checks`,
+    added: "new", changed: "changed",
+    next: "The new rules run from the next “check everything”. Older packs stay.",
+    nothingNew: (have) => `You already have all your packs${have.length ? " (no. " + nums(have) + ")" : ""}. More: ${BUY_URL}`,
+    expiredPack: (l) => `${l} has expired and no longer counts. For new rules you need a new token.`,
+    noLicense: "No license yet. Get your token here: " + BUY_URL + " — then type: license <token> (or just paste it).",
+    licenseAsk: "I will save your token in ~/.dante/license (readable only by you). Yes?",
+    licenseSaved: "Token saved. Type “update” and I fetch your packs.",
+    licenseBad: "That does not look like a Dante token. It starts with dnt_ and is 36 characters long.",
+    askFetch: "I will now fetch your packs from our server. One call, only your token goes out, nothing else:",
+    go: "Yes?", declined: "Fine, nothing fetched.", loading: "fetching the packs …",
+    curlMissing: "curl is missing on this machine. Download the packs in your browser and type: pack <file>",
+    unknownTok: `This token is unknown (or was replaced). Get a new one: ${BUY_URL} → “Lost your token?”`,
+    revoked: "This license is blocked. Write to info@nm-streetwear.space.", tooMany: "Already fetched many times today. Try again tomorrow.",
+    net: "No connection to the server. Nothing changed.", other: (c) => `The server answered ${c}. Nothing changed.`, badBody: "The server's answer was unreadable. Nothing changed.",
+    rejected: (r) => `The pack was refused: ${X.en.reason(r.code, r.detail)}. Nothing changed.`,
+    ignored: (f, why) => `${f} ignored: ${why}`,
+    reason: (c, d) => ({ too_big: "too big", bad_json: "not valid JSON", format: "unknown format", no_sig: "no signature", signature: "signature does not match", serial: "serial number missing", no_expiry: "expiry date missing", expired: "expired on " + d, needs: "needs Dante " + d + " or newer — run “npx dante-watch@latest”, then “update” again", fields: "invalid field", rule: "invalid rule (" + d + ")", unreadable: "unreadable" }[c] || c),
+    noFile: (f) => `File not found: ${f}`, packWhich: "Which file? Type: pack <file>",
+    on: (packs) => `Packs active: no. ${nums(packs)}`,
+    status: (packs, n) => (packs.length ? `Packs active: no. ${nums(packs)} (newest state ${packs[packs.length - 1].issued}) · ${n} checks` : `Built-in state only · ${n} checks. Fresh rules: “update”.`),
+    howToken: "Already have a token? Paste it here (dnt_…). No token yet? " + BUY_URL,
+  },
+  es: {
+    badge: " ACTUALIZADO ",
+    packLine: (packs, n) => `${packs.length} ${packs.length === 1 ? "pack nuevo" : "packs nuevos"}: n.º ${nums(packs)} · ahora ${n} revisiones`,
+    added: "nueva", changed: "cambiada",
+    next: "Las reglas nuevas corren desde el próximo «revisa todo». Los packs anteriores se quedan.",
+    nothingNew: (have) => `Ya tienes todos tus packs${have.length ? " (n.º " + nums(have) + ")" : ""}. Más: ${BUY_URL}`,
+    expiredPack: (l) => `${l} venció y ya no cuenta. Para reglas nuevas necesitas un token nuevo.`,
+    noLicense: "Aún no hay licencia. Tu token está aquí: " + BUY_URL + " — luego escribe: licencia <token> (o pégalo).",
+    licenseAsk: "Guardo tu token en ~/.dante/license (solo lo lees tú). ¿Sí?",
+    licenseSaved: "Token guardado. Escribe «actualiza» y traigo tus packs.",
+    licenseBad: "Eso no parece un token de Dante. Empieza con dnt_ y tiene 36 caracteres.",
+    askFetch: "Ahora traigo tus packs de nuestro servidor. Una llamada, solo sale tu token, nada más:",
+    go: "¿Sí?", declined: "Bien, no traje nada.", loading: "trayendo los packs …",
+    curlMissing: "Falta curl en este equipo. Descarga los packs en el navegador y escribe: pack <archivo>",
+    unknownTok: `Este token no se conoce (o fue reemplazado). Pide otro: ${BUY_URL} → «¿Token perdido?»`,
+    revoked: "Esta licencia está bloqueada. Escribe a info@nm-streetwear.space.", tooMany: "Hoy ya lo trajiste muchas veces. Prueba mañana.",
+    net: "Sin conexión con el servidor. No cambió nada.", other: (c) => `El servidor respondió ${c}. No cambió nada.`, badBody: "La respuesta del servidor no se pudo leer. No cambió nada.",
+    rejected: (r) => `El pack fue rechazado: ${X.es.reason(r.code, r.detail)}. No cambió nada.`,
+    ignored: (f, why) => `${f} ignorado: ${why}`,
+    reason: (c, d) => ({ too_big: "demasiado grande", bad_json: "JSON no válido", format: "formato desconocido", no_sig: "sin firma", signature: "la firma no coincide", serial: "falta el número de serie", no_expiry: "falta la fecha de vencimiento", expired: "venció el " + d, needs: "necesita Dante " + d + " o más nuevo — ejecuta «npx dante-watch@latest» y luego «actualiza» otra vez", fields: "campo no válido", rule: "regla no válida (" + d + ")", unreadable: "ilegible" }[c] || c),
+    noFile: (f) => `Archivo no encontrado: ${f}`, packWhich: "¿Qué archivo? Escribe: pack <archivo>",
+    on: (packs) => `Packs activos: n.º ${nums(packs)}`,
+    status: (packs, n) => (packs.length ? `Packs activos: n.º ${nums(packs)} (estado más nuevo ${packs[packs.length - 1].issued}) · ${n} revisiones` : `Solo el estado incluido · ${n} revisiones. Reglas frescas: «actualiza».`),
+    howToken: "¿Ya tienes un token? Pégalo aquí (dnt_…). ¿Aún no? " + BUY_URL,
+  },
+};
+
+export const pt = () => X[lang()] || X.en;
