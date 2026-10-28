@@ -1,5 +1,6 @@
 // Readable secrets inside a web root (.env, *.sql, backups, .git/config), from a path_exposed rule.
 // Without a standard web root the verdict is unknown, because the site could be anywhere.
+import { shqAll } from "../core/clean.mjs";
 import { findFiles } from "../core/fsx.mjs";
 import { result, evidence, SAFE, WARN, RISK, UNKNOWN } from "../core/check.mjs";
 import { webRoots, lines } from "./common.mjs";
@@ -39,12 +40,12 @@ export function exposedCheck(rule) {
         if (!hard.length) return result({ id, title, verdict: WARN,
           was: "Sicherungskopien öffentlicher Dateien sind für alle lesbar.",
           wie: "Sie enthalten meist nur, was die Seite ohnehin zeigt, können aber alte Reste enthalten. Ansehen und löschen, wenn du sie nicht brauchst.", wo: "Dieser Server.", evidence: ev,
-          fix: { why: "Die Kopien aus dem Webroot nehmen oder die Leserechte für andere entziehen.", steps: [{ desc: "Leserecht für andere entziehen", script: "chmod o-rwx " + (soft[0] || "<datei>") }] } });
+          fix: { why: "Die Kopien aus dem Webroot nehmen oder die Leserechte für andere entziehen.", steps: [{ desc: "Leserecht für andere entziehen", script: "chmod o-rwx -- " + (soft.length ? shqAll(soft.slice(0, 10)) : "<datei>") }] } });
         return result({ id, title, verdict: RISK,
           was: m.bad || "Dateien mit Geheimnissen sind im Web-Verzeichnis für alle lesbar.",
           wie: m.bad_how || "Die Pfade unten kann ein Besucher über die Seite abrufen.", wo: "Dieser Server.", evidence: ev,
           fix: { why: "Die Dateien aus dem Webroot nehmen oder die Leserechte für andere entziehen.",
-            steps: [{ desc: "Leserecht für andere entziehen", script: "chmod o-rwx " + (find.files[0] || "<datei>") }] } });
+            steps: [{ desc: "Leserecht für andere entziehen", script: "chmod o-rwx -- " + (find.files.length ? shqAll(find.files.slice(0, 10)) : "<datei>") }] } });
       }
       if (!find.ran) {
         return result({ id, title, verdict: UNKNOWN,

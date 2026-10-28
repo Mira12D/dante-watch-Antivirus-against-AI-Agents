@@ -9,6 +9,7 @@ import { sshdCheck } from "./sshd.mjs";
 import { formatsCheck } from "./formats.mjs";
 import { modelCardCheck, modelFilesCheck, agentConfigCheck } from "./hf.mjs";
 import { rechte } from "./rechte.mjs";
+import { schluessel } from "./schluessel.mjs";
 import { BUILTIN } from "../pack/builtin.mjs";
 import { loadPacks } from "../pack/pack.mjs";
 
@@ -16,7 +17,7 @@ const FACTORY = { version_cve: versionCheck, path_exposed: exposedCheck, file_pa
 
 // Deep rules (the Prüf-Bib's secret formats) are not part of the light battery that the patrol and the session run;
 // they run in the deep run only (buildDeep).
-export const buildBattery = (rules) => [...rules.filter((r) => !r.deep).map((r) => FACTORY[r.type](r)), rechte];
+export const buildBattery = (rules) => [...rules.filter((r) => !r.deep).map((r) => FACTORY[r.type](r)), rechte, schluessel];
 export const buildDeep = (rules) => rules.filter((r) => r.deep).map((r) => FACTORY[r.type](r));
 
 // a rule of a later list replaces the rule with the same id, new ids are added
@@ -39,7 +40,7 @@ export function activeBattery(opts) {
 }
 
 // muster intent -> check id. The ear recognises the worry; this says which hand to use.
-export const MUSTER = { pruef_php2shell: "php2shell", secrets: "secrets", webshell: "webshell", sshd: "sshd", rechte: "rechte" };
+export const MUSTER = { pruef_php2shell: "php2shell", secrets: "secrets", webshell: "webshell", sshd: "sshd", rechte: "rechte", schluessel: "schluessel" };
 
 export const checkById = (id, list = BATTERY) => list.find((c) => c.id === id) || null;
 

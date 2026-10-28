@@ -126,3 +126,19 @@ export function describe(j, c, M) {
 /** "ist jemand dazwischen", "man in the middle", "der Schlüssel hat sich geändert", "¿alguien en medio?" */
 const W = (alt) => new RegExp("(?<![\\p{L}\\p{N}])(?:" + alt + ")(?![\\p{L}\\p{N}])", "iu");
 export const wantsMitm = (line) => W("dazwischen|man[- ]in[- ]the[- ]middle|mitm|mitgelesen|mitlesen|abgefangen|abfangen|angezapft|manipuliert|host ?key|host-?schl[uü]ssel|schl[uü]ssel (?:hat sich |ist )?ge[aä]ndert|ge[aä]nderte[rn]? schl[uü]ssel|identification has changed|someone (?:is )?(?:in between|intercepting|listening)|in the middle|intercept\\p{L}*|tamper\\p{L}*|key (?:has )?changed|changed key|alguien (?:en medio|interceptando|escuchando)|interceptad\\p{L}*|clave (?:ha )?cambiad\\p{L}*|cambio de clave").test(line);
+
+// A changed host key is asked about once; then he remembers (the diary). Within WEEK days after a look or a "no" for the same host
+// he only says in one line what he knows. -> { ask: true } or { ask: false, last: diary entry }
+export const MITM_WEEK = 7;
+export function mitmMemory(diary, host, now = new Date()) {
+  const last = (diary || []).filter((e) => e.kind === "act" && (e.what === "hostkey" || e.what === "hostkey_no") && e.detail === host).slice(-1)[0];
+  if (!last || now - new Date(last.t) > MITM_WEEK * 864e5) return { ask: true };
+  return { ask: false, last };
+}
+
+/** after "the host key changed": "mach du es", "do it", "hazlo tú", "entferne den alten eintrag" - the person hands the step over */
+export const wantsHostKeyFix = (line) => {
+  const l = String(line || "").toLowerCase().trim();
+  if (l.length > 60 || l.includes("?")) return false;
+  return /(^|[^\p{L}])(mach (?:du |das |es |dus? )?(?:es|das|du)|mach du|machs|erledige (?:das|es)|do it|you do it|go ahead|fix it|hazlo(?: t[uú])?|h[aá]zlo t[uú]|entfern\p{L}* (?:den |die )?alte\p{L}* eintrag|l[oö]sch\p{L}* (?:den |die )?alte\p{L}* eintrag|ssh-keygen -r|remove the old (?:entry|key))(?![\p{L}])/iu.test(l);
+};

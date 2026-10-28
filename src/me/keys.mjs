@@ -1,6 +1,7 @@
 // "Find the key": which SSH keys does this machine have, and which one belongs to which server? Reads file NAMES in ~/.ssh and
 // their fingerprints (ssh-keygen -l, public part only), the key file noted in user.md for each server, and what the ssh agent
-// lists. Key contents are never read or shown; nothing is tried against a server.
+// lists. Key contents are never read or shown. Nothing is tried against a server - with ONE exception: when the person says
+// "take ~/.ssh/k for the second one", Dante tries that key once (a login that runs `true`, read-only) before he writes it down.
 import { readdirSync, readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import { homedir } from "node:os";
@@ -54,4 +55,50 @@ export async function keysFlow(io, user, { home = homedir() } = {}) {
   if (rest.length) io.say("  " + M.keysNoneFor(rest.map((s) => s.alias).join(", ")));
   const lines = io.exec ? agentLines(io.exec) : String((await io.local("ssh-add -l 2>/dev/null")).out || "").split("\n").filter((l) => /SHA256:/.test(l));
   if (lines.length) { io.say("  " + M.keysAgent(lines.length)); lines.slice(0, 6).forEach((l) => io.say("   " + l.replace(/^\d+\s+/, "").trim())); }
+}
+
+/** the line names a key file and a server, e.g. "nimm ~/.ssh/deploy_key für den ersten" / "use ~/.ssh/k for 203.0.113.54" */
+const KEYPATH = /(~?\/?[\w.~/-]*\.ssh\/[\w.-]+|~\/\.ssh\/[\w.-]+)/;
+export function saidKeyPath(line) {
+  const m = KEYPATH.exec(String(line || ""));
+  if (!m) return "";
+  const p = m[1].replace(/[.,;:!?]+$/, "");
+  return p.startsWith("~") || p.startsWith("/") ? p : "";
+}
+
+/**
+ * Tries the key ONCE against the server before it is written down. A key that is only stored is a guess; a key that
+ * logged in is a fact. Read-only, one attempt, a command that changes nothing. No sudo, nothing is copied.
+ * Returns { ok: true } | { ok: false, why: "denied"|"timeout"|... , line }
+ */
+export async function tryKey(sv, key, exec) {
+  if (!key) return { ok: false, why: "nokey" };
+  const r = await exec(sv.target, key);
+  if (r && r.reached) return { ok: true };
+  return { ok: false, why: (r && r.code) || "unclear", line: String((r && r.line) || "").slice(0, 80) };
+}
+
+/**
+ * "nimm ~/.ssh/deploy_key für den zweiten" - the person says how they get in. Dante does not just believe it: he tries the
+ * key once (read-only), and only writes it down as checked if the login really worked. If it does not, he says WHY and
+ * keeps the server as it was - a key that never worked must not look like one that did.
+ * io: mt, say, today, writeUser, tryKey(sv, key) -> { ok, why, line }, pick(answer) -> server|{kind:"all"}
+ */
+export async function assignKeyFlow(io, user, keyPath, pickServer) {
+  const M = io.mt(), sv = await pickServer();
+  if (!sv) return false;
+  const many = sv.kind === "all" ? ((user && user.servers) || []) : [sv];
+  for (const s of many) {
+    const r = await io.tryKey(s, keyPath);
+    if (r.ok) {
+      s.key = keyPath; s.keyChecked = true;
+      io.say("  " + M.keyTried(s.alias, keyPath));
+    } else {
+      // a key that did not work never replaces the one that is written down
+      io.say("  " + M.keyFailed(s.alias, keyPath, M.sshWhy(r.why, r.line || "")));
+    }
+  }
+  io.writeUser(user);
+  io.diary({ kind: "act", what: "key-assigned" });
+  return true;
 }

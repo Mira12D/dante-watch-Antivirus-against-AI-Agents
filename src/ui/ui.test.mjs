@@ -4,7 +4,7 @@ import { WORDMARK, startLines, danteLines } from "../mascot.mjs";
 import { quip } from "./quips.mjs";
 import { waitFor } from "./wait.mjs";
 import { job } from "./job.mjs";
-import { tipAt, clockText, TIPS } from "../ticker.mjs";
+import { tipAt, clockText, TIPS, WATCH_TIP } from "../ticker.mjs";
 import { setLang } from "../i18n.mjs";
 
 const plain = (s) => s.replace(/\x1b\[[0-9;]*m/g, "");
@@ -62,4 +62,8 @@ test("pack <Gerätedatei> wird nie gelesen (kein Endlos-Lesen von /dev/zero)", {
   const r = spawnSync("node", ["-e", `
     import("node:fs").then(({ statSync }) => { const st = statSync("/dev/zero"); console.log(st.isFile(), st.size); });`], { encoding: "utf8" });
   assert.equal(r.stdout.trim(), "false 0");   // the guard in installFile rests on exactly this: a device is no file
+});
+
+test("Der Wachschutz-Tipp sitzt in jeder Sprache an derselben Stelle (der Footer öffnet darauf)", () => {
+  for (const l of ["de", "en", "es"]) assert.match(TIPS[l][WATCH_TIP], /wachschutz|watch|vigilancia/i, l);
 });

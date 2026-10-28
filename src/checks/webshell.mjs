@@ -1,6 +1,7 @@
 // Looks for webshell markers in a web root (input passed to a call, eval of decoded data, system()
 // with request data), from a file_pattern rule. Reports the path and the marker, not the file content.
 // A match is a warning, since the patterns are heuristics.
+import { shq } from "../core/clean.mjs";
 import { grepFiles } from "../core/fsx.mjs";
 import { result, evidence, SAFE, WARN, UNKNOWN } from "../core/check.mjs";
 import { webRoots, lines, sq } from "./common.mjs";
@@ -42,7 +43,7 @@ export function patternCheck(rule) {
           wie: m.bad_how || "Die Pfade unten passen auf bekannte Muster — von Hand ansehen, nicht blind löschen.",
           wo: "Dieser Server.", evidence: ev,
           fix: { why: "Jede genannte Datei von Hand prüfen; wenn sie nicht von dir ist, offline nehmen und die Quelle suchen.",
-            steps: [{ desc: "Datei ansehen (nicht ausführen)", script: "less " + (lines(ev.map((e) => e.line).join("\n"))[0] || "<datei>") }] } });
+            steps: [{ desc: "Datei ansehen (nicht ausführen)", script: "less -- " + (lines(ev.map((e) => e.line).join("\n"))[0] ? shq(lines(ev.map((e) => e.line).join("\n"))[0]) : "<datei>") }] } });
       }
       ev.push(evidence("Webroot durchsucht, keine Webshell-Muster", { cmd: "grep -rlE '<muster>' --include=" + rule.glob + " " + roots, line: "(keine Treffer in: " + wr.roots.join(", ") + ")" }));
       return result({ id, title, verdict: SAFE,

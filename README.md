@@ -183,6 +183,7 @@ Where the knowledge comes from, and what was *not* taken:
 - **What attackers look for on Windows** (which places are worth checking: services, `PATH`, scheduled tasks, autostart, registry settings)
   was learned from the public documentation and check lists of PowerSploit/PowerUp, SharpUp (GhostPack), WinPEAS and HardeningKitty,
   and from Microsoft's own documentation of `icacls`, `schtasks` and the registry. We read what they look for; **we copied no code**.
+- **Webshell detection patterns** are adapted from the public YARA webshell rule sets (YARA-Rules) and SigmaHQ, which are shared under the **Detection Rule License (DRL-1.1)**. We re-expressed the detection logic in Dante's own pattern format and credit the source on each pattern; the DRL permits this, including commercial use, with attribution.
 - **Technique names** in the explanation cards follow MITRE ATT&CK where we are sure of the id.
 - - How the code and the library were made, and how fast: see **How it got built** above.
 - Runs on [Node.js](https://nodejs.org) and your system's own `ssh`, `git` and `curl`; nothing else is installed.

@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { wantsLocal, wantsServerPick, badTarget, options, choose, pickFlow } from "./pick.mjs";
+import { wantsLocal, wantsServerPick, badTarget, options, choose, pickFlow, pickInLine } from "./pick.mjs";
 import { pool } from "./pool.mjs";
 import { mt } from "./texts.mjs";
 import { setLang } from "../i18n.mjs";
@@ -53,4 +53,25 @@ test("Pool: höchstens N gleichzeitig, ein Fehler stoppt die anderen nicht", asy
   const res = await pool(Array.from({ length: 50 }, (_, i) => i), async (i) => { now++; peak = Math.max(peak, now); await new Promise((r) => setTimeout(r, 5)); now--; if (i === 7) throw new Error("tot"); return i; }, 6);
   assert.ok(peak <= 6, "peak " + peak); assert.equal(res.length, 50);
   assert.equal(res[7].ok, false); assert.equal(res.filter((r) => r.ok).length, 49);
+});
+test("Nummer oder Name: auch '3!!', 'die drei', 'der letzte', die Adresse mitten im Satz", () => {
+  const opts = options({ servers: [], hints: ["203.0.113.10", "203.0.113.12"] });
+  for (const a of ["3!!", "3.", "die drei", "der letzte", "203.0.113.12 halt", "mensch die letzte nummer, die 3", "el último", "the third"]) assert.equal(choose(a, opts).host, "203.0.113.12", a);
+  assert.equal(choose("ähm die drei... nein warte, die zwei", opts), null);   // two places in one line: no answer, he asks again
+});
+test("'mach mal bei dem zweiten', 'nimm db', 'und der andere?' nach der Serverliste", () => {
+  const sv = [{ kind: "server", alias: "web", target: "root@203.0.113.10" }, { kind: "server", alias: "db", target: "admin@203.0.113.11" }];
+  for (const l of ["ja mach mal bei dem zweiten", "ja mach, aber nur den zweiten, den db", "nimm db", "the last one", "el segundo servidor", "check the second server"]) assert.equal((pickInLine(l, sv) || {}).alias, "db", l);
+  assert.equal(pickInLine("und der andere?", sv, "root@203.0.113.10").alias, "db");
+  assert.equal(pickInLine("and the other one?", sv, "admin@203.0.113.11").alias, "web");
+  for (const l of ["wie mache ich den ersten schritt", "the second finding", "erklär das dritte wort", "hallo", "und der andere?", "was war die erste frage"]) assert.equal(pickInLine(l, sv), null, l);
+});
+test("aus dem Lab: Fragen über einen Rechner prüfen ihn nicht, 'primero' ohne Artikel ist kein Platz", () => {
+  const sv = [{ kind: "server", alias: "web", target: "root@203.0.113.10" }, { kind: "server", alias: "db", target: "admin@203.0.113.11" }];
+  for (const l of ["pero cuál es el nombre, el segundo o el último", "vale, revisa este equipo primero, a ver si está limpio", "sorry - i mean: is there any key for the db box or none at all?",
+    "so the db box is just unreachable, not missing a key?", "wait, db? i didn't even ask about db yet. is db one of my servers or are you guessing?",
+    "und der andere rechner, db – wo liegt der überhaupt, welche ip?", "ähm... ja so halb, und der zweite rechner da, was is mit dem?",
+    "no, eso es el mismo otra vez. me refiero a otro, uno que funcione. ¿qué máquinas me has visto?", "perdona, pero no me has contestado lo de root... y ahora esto otro del directorio web? o qué"]) assert.equal(pickInLine(l, sv, "root@203.0.113.10"), null, l);
+  for (const [l, a] of [["the first one", "web"], ["no, the last one you showed me, the server thing", "db"], ["das hab ich doch schon gesagt, der zweite! prüfe den zweiten jetzt", "db"],
+    ["second means db. check db. go", "db"], ["ok. jetzt web prüfen: offene ports, updates, cves. kurz.", "web"], ["pues apagado o con cortafuegos, vale. mira el otro", "db"]]) assert.equal((pickInLine(l, sv, "root@203.0.113.10") || {}).alias, a, l);
 });

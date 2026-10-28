@@ -10,3 +10,4 @@ const scriptName = (base, platform = process.platform) => base + (platform === "
 export const patrolScript = (platform) => join(homeDir(), scriptName("patrol", platform));  // what the schedule starts
 export const deepScript = (platform) => join(homeDir(), scriptName("deep", platform));      // what the weekly schedule starts
 export const patrolLog = () => join(homeDir(), "patrol.log");
+export const guardFile = () => join(homeDir(), "guard.json");  // the Wachschutz identity (id+secret) and activation token

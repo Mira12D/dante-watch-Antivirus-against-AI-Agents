@@ -3,7 +3,8 @@
 import { lang } from "../i18n.mjs";
 import { tipAt, clockText, age, STALE } from "../ticker.mjs";
 
-let on = false, timer = null, tipIdx = Math.floor(Math.random() * 8);
+let on = false, timer = null, tick = 0, tipIdx = Math.floor(Math.random() * 8);
+const ROTATE = 28;   // ticks of 250 ms: the tip moves on by itself every 7 s, like a loading screen (and with every input)
 const rows = () => process.stdout.rows || 24, cols = () => process.stdout.columns || 80;
 const dim = (s) => `\x1b[2m${s}\x1b[0m`, yellow = (s) => `\x1b[33m${s}\x1b[0m`;
 const cut = (s, n) => (s.length > n ? s.slice(0, Math.max(0, n - 1)) + "…" : s);
@@ -18,15 +19,16 @@ function draw() {
   process.stdout.write("\x1b7" + `\x1b[${r - 1};1H\x1b[2K` + dim("─".repeat(Math.max(10, c - 2))) + `\x1b[${r};1H\x1b[2K` + row + "\x1b8");
 }
 
-export function footerStart() {
+export function footerStart(first) {
   if (!process.stdout.isTTY || process.env.DANTE_NO_FOOTER || on) return;
   on = true;
+  if (Number.isInteger(first)) tipIdx = first;   // the tip the footer opens on (the rest follow, every 7 s)
   const r = rows();
   process.stdout.write(`\x1b[1;${r - 2}r`);   // scroll region = the top, without the lowest 2 lines
   process.stdout.write(`\x1b[${r - 2};1H`);   // cursor into the upper part
   draw();
   // four times a second, so the footer stays visible even when readline or other output paints over it
-  timer = setInterval(draw, 250); timer.unref?.();
+  timer = setInterval(() => { if (++tick % ROTATE === 0) tipIdx++; draw(); }, 250); timer.unref?.();
   process.stdout.on("resize", draw);
   process.on("exit", footerStop);
 }

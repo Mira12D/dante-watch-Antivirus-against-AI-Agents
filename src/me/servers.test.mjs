@@ -135,3 +135,8 @@ test("Footer-Tipp und Alterszeile sagen 'update', in jeder Sprache", async () =>
   assert.match(all("de"), /Sag „update“/); assert.match(all("en"), /Say “update”/); assert.match(all("es"), /Di «actualiza»/);
   for (const l of ["de", "en", "es"]) { assert.match(OLD[l](20), /update|actualiza/); assert.ok(!/npx dante-watch@latest/.test(OLD[l](20))); }
 });
+test("'wie gehts bro' ist eine Begrüßung, kein Blick auf alle Server", async () => {
+  const { namesMachines } = await import("./servers.mjs");
+  for (const l of ["wie gehts bro", "wie gehts", "na wie läuft", "how are you bro", "qué tal bro", "alles klar?"]) assert.equal(namesMachines(l), false, l);
+  for (const l of ["wie gehts meinen servern", "wie läuft die kiste", "how are my servers", "cómo están mis servidores", "alles ok bei allen?"]) assert.equal(namesMachines(l), true, l);
+});

@@ -8,6 +8,8 @@
 //   probe(server)  read-only visit              writeUser(u), userPath(), diary(entry)
 //   plan(), install(plan), remove(), isArmed()  today(), now(), dim(text)
 import { TIMES } from "./schedule.mjs";
+import { playLook } from "../ui/eyes.mjs";
+import { narrate } from "./narrate.mjs";
 
 // the next time a patrol runs, as { when: "today"|"tomorrow", time }
 export function nextRun(now = new Date()) {
@@ -87,7 +89,15 @@ export async function onboard(io) {
   io.lastOther = false;
   if (!(await confirm(io, io.mt().askLook, io.mt().explainLook, { lenient: true }))) { if (!io.lastOther) io.say("  " + io.mt().declined); return { declined: true }; }
   const f = await io.look();
-  for (const l of io.mt().sees(f)) io.say("  " + l);
+  // the look-around is not a spinner: two pixel eyes follow where he is looking, the places go by underneath
+  try {
+    const labels = ["  .ssh", "  Projekte", "  System"];
+    const write = io.write || ((s) => io.say(s.replace(/\n$/, "")));
+    await playLook(write, labels);
+  } catch {}   // eyes are decoration - they never block the real work
+  // then he TELLS what he saw, in full sentences instead of a bare sees() list
+  const story = narrate(f);
+  for (const l of (story && story.length ? story : io.mt().sees(f))) io.say("  " + l);
   const name = f.name || "";
   if (name) io.say("  " + io.mt().nameNote(name));
 
@@ -97,5 +107,6 @@ export async function onboard(io) {
   io.diary({ kind: "act", what: "look" });
   io.say("  " + io.mt().noted(io.userPath()));
   io.say("  " + io.mt().nextHint);
+  io.say("  " + io.dim(({ de: "Wenn du magst: sag „prüf“, dann sehe ich nach, ob irgendwo eine Tür offen ist.", en: "If you like: say “check” and I will see whether a door is open somewhere.", es: "Si quieres: di «revisa» y miro si hay alguna puerta abierta." })[io.lang()] || ""));
   return { user, armed: false };
 }

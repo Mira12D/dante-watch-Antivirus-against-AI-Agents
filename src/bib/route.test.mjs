@@ -68,3 +68,16 @@ test("Neue Wünsche (Umschauen, Zeitplan, Bericht) in drei Sprachen, mit Formuli
   const total = Object.values(SET).flat().length;
   assert.ok(bad.length <= 2, `${total - bad.length}/${total} richtig:\n  ` + bad.join("\n  "));
 });
+
+test("Aktionen (Schlüssel, Tiefenlauf, Wachschutz, Runde) in drei Sprachen, Formulierungen außerhalb des Trainings (28.10.)", () => {
+  const SET = {
+    "muster:schluessel": ["wer hat noch schlüssel zum server ?", "gibt es fremde ssh keys bei mir", "which keys can still get into my box", "quien mas puede entrar a mi servidor con llave"],
+    "muster:tief": ["schau in meinen projekten nach passwörtern", "geh mal tief rein und such secrets", "look through all my repos for leaked keys", "revisa a fondo mis carpetas por contraseñas"],
+    "muster:wachschutz": ["leg mir ne falle aus für angreifer", "bait files for my env please", "quiero un señuelo para mis claves", "schalt den wachschutz ein"],
+    "muster:patrouille": ["check everything on the machine", "revisa todo de arriba a abajo"],
+  };
+  const bad = [];
+  for (const [want, qs] of Object.entries(SET)) for (const q of qs) { const got = route(q); if (!right(got, want)) bad.push(`${q} → ${got} (soll ${want})`); }
+  const total = Object.values(SET).flat().length;
+  assert.ok(bad.length <= 1, `${total - bad.length}/${total} richtig:\n  ` + bad.join("\n  "));
+});

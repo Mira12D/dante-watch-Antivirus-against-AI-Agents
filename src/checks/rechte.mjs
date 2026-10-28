@@ -1,5 +1,6 @@
 // World-writable files under /etc and the web roots. Anyone can turn such a file into a foothold
 // (cron, config, PHP page). Lists paths only. If the search cannot run the verdict is unknown.
+import { shqAll } from "../core/clean.mjs";
 import { worldWritableFiles } from "../core/fsx.mjs";
 import { result, evidence, SAFE, WARN, UNKNOWN } from "../core/check.mjs";
 import { webRoots } from "./common.mjs";
@@ -26,7 +27,7 @@ export const rechte = {
       return result({ id: this.id, title: this.title, verdict: WARN,
         was: "Dateien an heiklen Stellen sind für jeden beschreibbar.", wie: "Die Pfade unten kann jeder Nutzer auf dem System überschreiben.",
         wo: "Dieser Server.", evidence: ev,
-        fix: { why: "Das Schreibrecht für andere entziehen.", steps: [{ desc: "Schreibrecht für andere weg", script: "chmod o-w " + (find.files[0] || "<datei>") }] } });
+        fix: { why: "Das Schreibrecht für andere entziehen.", steps: [{ desc: "Schreibrecht für andere weg", script: "chmod o-w -- " + (find.files.length ? shqAll(find.files.slice(0, 10)) : "<datei>") }] } });
     }
     ev.push(evidence("Durchsucht, nichts für alle Beschreibbares", { cmd: find.cmd, line: "(keine Treffer in: " + dirs + ")" }));
     return result({ id: this.id, title: this.title, verdict: SAFE,

@@ -1,6 +1,6 @@
 {
   "name": "dante-watch",
-  "version": "0.1.18",
+  "version": "0.1.29",
   "description": "Dante watches your own server and never lies to itself: every verdict carries the real line it came from.",
   "type": "module",
   "bin": {

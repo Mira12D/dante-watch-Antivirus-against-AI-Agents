@@ -1,5 +1,108 @@
 # Changelog
 
+## 0.1.29
+
+- **„Ist der Wachschutz an?“ sagt den Zustand.** Vorher startete diese Frage das Anschalten. Jetzt antwortet Dante „aus“ (mit dem Hinweis, wie man ihn anschaltet) oder „aktiv, noch N Tage“ und startet nichts.
+- **„Ok, bin ich sicher?“ prüft diesen Rechner.** Vorher fragte er „Meinst du prüf (64 %)?“. Eine Frage mit drei Wörtern oder mehr zählt nach einer offenen Ja/Nein-Frage auch nie als Ja, egal wie sie anfängt („ok …“).
+- **„Was heißt das?“ nach der Serverliste erklärt die Liste**, statt sie zu wiederholen: wie viele Server er kennt, bei wie vielen er weiß, was läuft (selbst gesehen), und dass du ihm die Rolle sagst. Deutsch, Englisch, Spanisch.
+- **Der Abschluss der Serverrunde sagt jeden Satz nur einmal.**
+- Aufgeräumt: Beispiele in Kommentaren und Tests nennen jetzt neutrale Adressen (203.0.113.x) und Dateinamen statt realer Server und Schlüsselnamen.
+- Zusätzlich wurde Dante in 50 Gesprächen in deiner Art getestet (Deutsch und Englisch, Tippfehler, Nachfragen, Zeitplan, Update, Kaufen, Brechversuche): ohne Absturz, ohne ausgeführte Befehle, ohne Netzaufruf.
+
+## 0.1.28
+
+- **Die Serverrunde hat jetzt einen Abschluss, wie die einzelne Prüfung.** Nach „wie geht's meinen servern“ steht pro Server in einer Zeile, WAS die Hinweise sind, danach ein Satz, was das für dich heißt und was als Nächstes kommt. Vorher stand nur „1 mit Hinweisen“ und man musste raten.
+- **„Was sind die 3 Hinweise?“ zeigt sie.** Die Ergebnisse der Runde werden gemerkt (pro Server, mit denselben Zeilen und Belegen wie bei der Einzelprüfung). Vorher prüfte er stattdessen den zuletzt gewählten Server neu, und das war ausgerechnet der, der nicht erreichbar war. Auch „warum?“, „erklär das“, „nochmal“ und „mach du es“ beziehen sich auf die Runde. „Mach du es“ bleibt gültig, solange ein Host-Schlüssel-Schritt offen ist, auch wenn dazwischen eine Liste kam.
+- **Er fragt nicht mehr nach Dingen, die er weiß.** An einer Tür, an der er in diesem Gespräch schon geklopft hat und die nicht aufging, klopft er nicht wieder an („soll ich dort nachsehen?“); er sagt stattdessen, dass es nicht ging und warum.
+- **Eine neue Frage wird nicht mehr verschluckt, wenn gerade eine Ja/Nein-Frage offen ist.** Antwortest du auf „Soll ich prüfen, ob jemand dazwischen sitzt?“ mit etwas anderem („was sind die Hinweise?“, „welche noch?“), galt das bisher als Nein und die Zeile war weg; Dante wirkte dann, als hätte er nichts gehört. Jetzt wird sie zur nächsten Eingabe. Ein „mach du es“ zählt als Ja nur bei Fragen, bei denen Dante bloß nachsieht; wo etwas geändert wird, braucht es weiter ein klares Ja.
+- **Die Auswahl „Welchen Server meinst du?“ hält dich nicht mehr fest.** Eine Zeile, die keine Auswahl ist und wie ein Wunsch klingt („my name is Mustafa“), gibt die Auswahl auf und wird die nächste Eingabe, statt „ich habe das nicht verstanden“ in Schleife.
+- **Der Abschluss der Serverrunde widerspricht sich nicht mehr.** Derselbe Befund auf zwei Servern zählt einmal, und was nur sicher ist, wird nicht noch einmal gesagt.
+- **Tippfehler bei Wünschen werden korrigiert** (feste Liste, nichts wird geraten): „chek my mak“, „are my servres safe“, „pruef mal meinen mak“, „zeig mir die serveer“, „schluessel“, „koeder“ werden verstanden wie die richtigen Wörter. Namen, Adressen, Pfade und Zahlen bleiben unberührt, ebenso ein großgeschriebenes Wort mitten im Satz („ich heiße Mak“). Vorher las er „chek my mak bro“ als Smalltalk.
+- **Neue Formulierungen:** „Lockdateien verteilen und mich alarmieren“ (Köder), „hab ich irgendwo einen API-Key hart reingeschrieben?“ / „did I hardcode an API key“ (Tiefenlauf), „wo bin ich hier gelandet?“ / „where am I“ (Systeminfo), „wie heiße ich?“ / „what is my name“ (er antwortet aus `user.md` oder sagt, dass er den Namen noch nicht kennt). „nochmal“ nach der abgelehnten Schlüssel-Ersetzung prüft die Server erneut.
+- **„Was können meine Server?“** wird als Frage nach den Servern erkannt (vorher: „Welchen meinst du?“).
+
+## 0.1.27
+
+- **Eine Stufe für Nachfragen statt vieler Einzelregeln.** Ein paar Arten von Nachfragen kommen immer wieder und ergeben nur neben der letzten Antwort Sinn: „welche noch?", „was sind die?", „was können die?", „mach du es", „warum?", „erklär das", „nochmal", „ist das schlimm?". Dante erkennt sie jetzt einmal (feste Wörter, Deutsch/Englisch/Spanisch, nur bei kurzen Zeilen, nie als Wahrscheinlichkeit) und schickt sie an das Thema seiner letzten Antwort: Serverliste, geänderter Host-Schlüssel oder Prüfergebnis. Ein neuer Wunsch („mach den check", „prüf meinen server") wird nie für eine Nachfrage gehalten, und eine Nachfrage ohne Thema geht nirgends hin.
+- **„mach du es" beim geänderten Host-Schlüssel.** Dante zeigt den Plan mit den beiden Befehlen (`ssh-keygen -R`, `ssh-keyscan`), fragt nach einem klaren Ja, entfernt den alten Eintrag nur in DEINER `known_hosts`, merkt sich den Schlüssel, den der Server jetzt zeigt, und nennt den Fingerabdruck zum Vergleich mit der Konsole deines Anbieters. Auf dem Server ändert er nichts. „warum?" erklärt den Unterschied zwischen Neuaufsetzen und „jemand sitzt dazwischen".
+- **„Per SSH auf meinen Server nachsehen“ ohne Ziel prüft nie mehr den eigenen Rechner.** Sätze wie „verbind dich per SSH mit dem Server“, „check my staging server over SSH“ oder „can you SSH into my VPS“ ohne Adresse fielen bisher auf die Prüfung dieses Rechners zurück (der häufigste Fehler im 100-Fragen-Lauf). Jetzt fragt Dante, welchen Server du meinst, und zeigt deine bekannten Server aus der Konfiguration und der `known_hosts` zur Auswahl; kennt er keinen, sagt er das und nennt `server root@name`. Deutsch, Englisch, Spanisch.
+- **Arbeitsanzeige bei der Serverrunde.** Beim Prüfen mehrerer Server läuft jetzt eine Zeile mit Sekundenzähler, damit es nie aussieht, als hinge er; die Ergebnisse laufen darüber.
+- **Router: Training über alle Absichten.** Zusätzlich rund 17.000 Zeilen (Deutsch/Englisch/Spanisch) für alle Absichten des Muster-Ohrs, von einem Modell getippt und von einem zweiten Durchgang blind einsortiert; nur Einigung blieb.
+- Schönheit: „1 servers" heißt jetzt „1 server".
+
+## 0.1.26
+
+- **Er hält den Faden bei Serverlisten.** Nach „welche systeme habe ich“ meint „welche noch?“ jetzt die Server-Liste (vorher fragte er „Meinst du hilfe?“), und nach einer Liste erklärt „was sind diese server?“ in drei Sprachen, was die Einträge sind (Rechner aus der known_hosts, noch nicht angesehen) bzw. beschreibt die eingetragenen Server mit Rolle und Gesehenem (vorher: „Meinst du was ist die Lücke?“).
+
+## 0.1.25
+
+- **Er kennt deine Server jetzt, statt nur eine Liste zu zeigen.** Beim Besuch eines Servers liest Dante (nur lesen, gleiche SSH-Schiene, harte Zeitlimits): laufende Dienste, offene Ports, Docker-Container, die Seiten, die der Webserver ausliefert, und Datenbank-Versionen. Davon behält er, was er wirklich gesehen hat, mit dem Tag: „nginx, PostgreSQL 15.5 (gesehen 2026-10-28)". Früher wurde der Webserver abgefragt und dann weggeworfen.
+- **Server haben jetzt ein Gedächtnis (`user.md`).** Pro Server stehen getrennt: das System, deine Rolle für ihn (deine Worte, z. B. „Kasse"), was Dante dort gesehen hat (mit Datum) und ob der Schlüssel geprüft ist. Diese Quellen werden nie vermischt. Aus Diensten und Ports leitet er nie eine Rolle ab: er kann sagen „da läuft nginx und PostgreSQL auf 443", nie „damit wird kassiert". Alte Einträge ohne die neuen Felder bleiben unverändert lesbar.
+- **„Was ist der zweite?" geht an deine Server** („der zweite", „db", „the last one", „el primero"; DE/EN/ES) und antwortet aus dem, was er hat: deine Rolle, was er gesehen hat, das System. Fehlt etwas, sagt er das ehrlich. Ohne Bezug auf einen Server bleibt die Frage („welcher Server ist das?") beim Rechner selbst.
+- **Rolle merken:** „der zweite ist die Kasse", „db is the database", „el segundo es la caja". Er schreibt es als deine Worte auf und zeigt es auch so wieder an. Fragen („ist der zweite die Kasse?") und Zustände („web is down") merkt er sich nicht als Rolle.
+- **Schlüssel-Gegenprobe.** Sagst du „nimm ~/.ssh/key für den ersten", probiert Dante den Schlüssel einmal aus (ein harmloser Test-Login, ändert auf dem Server nichts) und trägt ihn nur als „geprüft" ein, wenn der Login klappt. Klappt er nicht, sagt er sofort warum und ändert nichts: ein kaputter Schlüssel ersetzt nie einen funktionierenden. Das ist die einzige Stelle, an der Dante auf deinen ausdrücklichen Satz hin etwas bei einem Server versucht, nie ein Scan.
+- Behoben: schloss sich die Eingabe, während etwas Langes lief (Strg-D, beendete Pipe), brach Dante mit einem Fehler ab. Jetzt beendet er ruhig.
+
+## 0.1.24
+
+- **Er versteht mehr Formulierungen für vier Wünsche**, die bisher nur an festen Stichwörtern hingen: „wer hat noch Zugang / welche Schlüssel" (SSH-Schlüssel-Prüfung), Tiefenlauf in den Projekten, Wachschutz/Köder und „prüf alles". Drei Sprachen. Beispiel, das vorher durchfiel: „wer hat noch schlüssel zum server?" meinte Dante für „wer bist du". Er sortiert diese Zeilen jetzt dem richtigen Wunsch zu oder fragt nach, statt falsch zu raten.
+- Gemessen im 100-Fragen-Lauf (50 DE / 50 EN, echte Sitzungen, zwei Stichproben): vorher 82 %, jetzt 93 %. Auf den Zeilen, die er nie gesehen hat, ist das Hauptohr unverändert (117/132, Ja/Nein 33/33).
+- Der Tiefenlauf ist jetzt auch über das Muster-Ohr erreichbar, nicht nur über die festen Stichwörter.
+- Offen und bekannt: „schau hin" direkt nach einem offenen Punkt, und ein Bericht-Wunsch, bevor es einen Lauf gab, antwortet „nichts aufgeschrieben".
+
+## 0.1.23
+
+- **Das Erlebnis, Schritt für Schritt.** Fragt Dante „Darf ich mich umschauen?" und du sagst ja, erscheinen zwei Pixel-Augen, die links, rechts und blinzelnd schauen; darunter gehen die Orte vorbei, an die er schaut (`.ssh`, Projekte, System). Ohne Terminal (Pipe, CI) bleiben die Augen statisch.
+- **Er erzählt, was er gesehen hat** (DE/EN/ES), in ganzen Sätzen statt einer Liste: Rechner, Server aus deiner Konfiguration, Werkzeuge, die wirklich da sind. Jeder Satz kommt nur aus einem echten Fund; was nicht gefunden wurde, wird nicht erzählt. Rollen wie „web"/„db" aus Namen sind als Hinweis formuliert, nie als Tatsache.
+- **Nach dem Prüfen sagt er, was es für dich heißt.** Zu jedem Ergebnis ein Satz je nach Urteil (offen, Schritt nötig, sicher, unbekannt), Rechner (Mac/Server) und Art des Fundes (SSH-Schlüssel, Kopie auf der Platte, anderes) mit dem nächsten Schritt. Er ändert dadurch nichts und gibt kein Urteil ab, das die Tabelle nicht belegt.
+- **Router stark erweitert** aus einem 100-Fragen-Lauf: Bericht, Prüfen und Erklären werden öfter richtig verstanden, Grußformeln am Satzanfang werden abgeschnitten, Tiefenlauf, Schlüsselprüfung und Wachschutz greifen bei mehr Formulierungen; „Secrets/Keys in meinen Projekten finden" geht in den Tiefenlauf, getrennt vom SSH-Schlüssel-Check.
+
+## 0.1.21
+
+- **Webshell-Erkennung erweitert** (7 neue Muster: preg_replace /e, assert/create_function mit Eingabe, gz+base64-Verpackung, bekannte Shell-Kennungen c99/r57/b374k/FilesMan, eval einer Variablen, Backtick-Ausführung). Quelle: YARA-Rules/SigmaHQ unter DRL-1.1, in Dantes Format neu geschrieben, jede mit Quellenangabe.
+- **Bericht als PDF.** Nach jedem Lauf schreibt Dante den Bericht als PDF nach `~/.dante/reports/` (zero-dep). „bericht“/„report“/„informe“ zeigt den Pfad und legt auf Wunsch (im Terminal, nach Ja) eine Kopie in deinen Downloads-Ordner, ohne je etwas zu überschreiben.
+- **`--sarif`.** SARIF-2.1.0-Ausgabe für GitHub Code Scanning (Funde = OFFEN/SCHRITT NÖTIG; SICHER/UNBEKANNT sind keine Funde).
+- **Prüfung „wer hat noch einen Schlüssel“.** Listet die SSH-Schlüssel aller lesbaren Konten (Konto, Typ, Kommentar, Fingerabdruck — nie der Schlüssel) und warnt bei beschreibbaren authorized_keys oder Schlüsseln auf Konten ohne Login.
+- Found by a planted-fault test on an isolated Ubuntu server: (1) `PermitEmptyPasswords yes` was not reported; it now has its own rule. (2) The plan to close readable secrets, writable files and (by hand) web shell candidates handled only the first file; it now covers all listed files. (3) Paths found on a machine now go into the shown fix commands inside single quotes, so a file name cannot smuggle in a command.
+- **Security: terminal escape sequences.** Text from the outside (file names, lines of scanned files, what a server prints) can no longer steer the terminal: clearing the screen, overwriting a verdict line, changing the window title or writing to the clipboard. Command output, file reads and file lists are cleaned at the source; everything printed passes a last guard that lets only Dante's own colours through. Other scanners had exactly this hole (flawfinder, GuardDog, ack and more).
+- Ist der Wachschutz aus, öffnet die Fußzeile mit dem Wachschutz-Tipp (erster Monat gratis) und wechselt dann alle 7 Sekunden weiter. Vorher startete sie bei einem zufälligen der ersten acht Tipps, der Geld-Tipp kam nie zuerst.
+- Wachschutz abgelaufen (Server): eine Mail in der Sprache der Person mit Verlängern-Link (7 Tage, nur für diese Kennung) und der Zahl der Köder-Treffer seit dem Ablauf (Arten, letzte Zeit; ehrlich "keiner angeschlagen", wenn nichts war). Schlägt nach dem Ablauf ein Köder an, gibt es keine Alarm-Mail mehr, aber einmal am Tag diese Mail mit den Fakten.
+- Wachschutz: ist dieser Dante schon gebunden und aktiv (Token verloren, Ordner gewechselt), stempelt der Server den Token beim Anschalten neu, Dante speichert ihn und sagt "Token angenommen". Vorher stand dort "null" statt eines Links.
+- Nach dem Wächter-Link fragt Dante "Soll ich die Seite öffnen? [ja / nein]" (Befehl vorher gezeigt, geöffnet erst nach deinem Ja).
+- **Wachschutz in freien Sätzen.** "Ich will einen Köder für meine .env", "set up a honeypot", "quiero un señuelo" starten den Wachschutz (feste Wörter, keine Wahrscheinlichkeit). Ist er aus, beginnt der Anschalt-Ablauf mit dem gezeigten curl und wartet auf dein Ja. The activation key pair for the signed tokens is its own, separate from the pack key.
+- **Wachschutz (Pro).** `wachschutz` / `watch` / `vigilancia`: Dante lays bait files after the patterns real attacks reach for
+  (`.env.production`, `mcp.json`, `.npmrc`, AWS credentials). Dante itself still sends nothing on its own: only a stolen bait
+  that someone *uses* calls the server, and then you get one mail (at most one per hour). Dante makes its own random identity
+  (`dante-1234`); the one call that introduces it is shown as a curl and runs after your yes. You bind your email once on the
+  web page, through a one-time link only your terminal showed. First month free, then 1.99 EUR a month. The page hands back a
+  signed token (`wachschutz <token>`) that Dante checks offline. `wachschutz koeder <env|mcp|npm|aws> [folder]` lays a bait and
+  never overwrites a file. If the watch is off, he mentions it at most once a day.
+  The alert mail says **why** (what that bait would have given the person: data, an agent's tools, the right to publish packages,
+  a cloud account) and **who** (a hint from the request's signature: AI agent, package tool, script, scanner, browser; it can be
+  forged, so the mail says so), and what to do now.
+- **Loading-screen tips** now move on by themselves every 7 seconds (before: only with each input) and mention the watch in German,
+  English and Spanish. The tip "Dante never calls anyone on his own" now names the watch next to update and buy, so it stays true.
+
+## 0.1.20
+
+- **"wie gehts bro" is a greeting.** It no longer starts a look at all your servers: a status round needs a machine in the line
+  ("wie gehts meinen servern", "how are my servers", "¿cómo están mis servidores?", "alles ok bei allen?").
+- **He remembers the changed host key.** After he asked "shall I check whether someone is in between?" (or looked), he does not ask
+  again for the same host for a week, also in a new session; he says in one line what he knows (the day, what he saw, or that you
+  said no) and how to clear it (`ssh-keygen -R <host>` after a reinstall). The question now shows `[ja / nein]`. Kept in
+  `~/.dante/diary.jsonl` (host and result only).
+
+## 0.1.19
+
+- **He keeps the thread, part three (found by 30 test conversations that only talk in references).**
+  - After he listed your servers, "mach mal bei dem zweiten" / "nimm db" / "the last one" / "el segundo servidor" checks *that one*
+    machine, not all of them. "und der andere?" with two servers means the one that is not the current one. A question about a machine
+    ("welche IP hat db?", "¿cuál es, el segundo o el último?") is answered, never turned into a check.
+  - "Nummer oder Name" now also takes "3!!", "die drei", "der letzte", "el último" or an address in the middle of a sentence; two
+    different numbers in one line ("die drei, nein die zwei") are asked again instead of guessed.
+  - "j, gut" and "meinetwegen" count as a yes where a yes only lets him look.
+- **`DANTE_FIX_DRY=1`** (tests): the fix plan is shown and agreed, nothing runs.
+
 ## 0.1.18
 
 - **He keeps the thread, part two (two context errors from real use).**

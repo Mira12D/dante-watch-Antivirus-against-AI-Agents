@@ -10,33 +10,41 @@ export const STALE = 14;              // days until Dante says his knowledge is 
 let knowledge = BIB_DATE;
 export const setKnowledge = (iso) => { const d = String(iso || "").slice(0, 10); if (/^\d{4}-\d{2}-\d{2}$/.test(d) && d > BIB_DATE) knowledge = d; };
 
+// Where the watch tip (the one with the free month) sits in every language's list: the footer opens on it while the watch is off.
+export const WATCH_TIP = 10;
 export const TIPS = {
   de: [
     "Dante sagt nie „sicher“ ohne echte Zeile.", "Kein Ja, keine Änderung. Nie.",
-    "Dante ruft von sich aus nie an. Nur „aktualisier“ und „kaufen“ tun es, und erst nach deinem Ja.",
+    "Dante ruft von sich aus nie an. Nur „aktualisier“, „kaufen“ und „wachschutz“ tun es, und erst nach deinem Ja.",
     "Eine Versionsnummer allein entscheidet nie — Distros flicken leise.",
     "Sieht er dein Ziel nicht, sagt er „unbekannt“. Nicht „sicher“.",
     "Sag einfach, was du willst: „prüf meinen server root@host“.",
     "Prüf Dantes Plan gegen eine andere KI. Er will das.", "demo zeigt die ganze Schleife an einem harmlosen Loch.",
     "Update? Sag „update“, dann sehe ich nach, ob es etwas Neueres gibt.", "Frische Regeln als einzelne Packs: tipp „aktualisier“. Alte bleiben erhalten.",
+    "Wachschutz: Dante legt Köder aus. Benutzt jemand einen, bekommst du sofort eine Mail. Erster Monat gratis: „wachschutz“.",
+    "Köder rufen nur, wenn sie benutzt werden. Dante selbst bleibt stumm.",
   ],
   en: [
     "Dante never says „safe“ without a real line.", "No yes, no change. Ever.",
-    "Dante never calls anyone on his own. Only „update“ and „buy“ do, and only after your yes.",
+    "Dante never calls anyone on his own. Only „update“, „buy“ and „watch“ do, and only after your yes.",
     "A version number alone never decides — distros patch quietly.",
     "If he cannot see your target, he says „unknown“. Not „safe“.",
     "Just say what you want: „check my server root@host“.",
     "Check Dante's plan against another AI. He wants you to.", "demo runs the whole loop on a harmless hole.",
     "Update? Say “update” and I check whether there is something newer.", "Fresh rules as single packs: type „update“. Old ones stay.",
+    "Watch: Dante lays bait. If someone uses one, you get a mail at once. First month free: „watch“.",
+    "Bait only calls when it is used. Dante himself stays silent.",
   ],
   es: [
     "Dante nunca dice „seguro“ sin una línea real.", "Sin sí, no hay cambio. Nunca.",
-    "Dante nunca llama por su cuenta. Solo „actualiza“ y „comprar“ lo hacen, tras tu sí.",
+    "Dante nunca llama por su cuenta. Solo „actualiza“, „comprar“ y „vigilancia“ lo hacen, tras tu sí.",
     "Un número de versión solo nunca decide — las distros parchean en silencio.",
     "Si no ve tu destino, dice „desconocido“. No „seguro“.",
     "Di lo que quieres: „revisa mi servidor root@host“.",
     "Compara el plan de Dante con otra IA. Él quiere que lo hagas.", "demo muestra todo el ciclo en un hueco inofensivo.",
     "¿Actualizar? Di «actualiza» y miro si hay algo más nuevo.", "Reglas frescas en packs sueltos: escribe „actualiza“. Los viejos se quedan.",
+    "Vigilancia: Dante pone señuelos. Si alguien usa uno, recibes un correo al instante. Primer mes gratis: „vigilancia“.",
+    "Los señuelos solo avisan cuando se usan. Dante en sí se mantiene en silencio.",
   ],
 };
 export const OLD = {

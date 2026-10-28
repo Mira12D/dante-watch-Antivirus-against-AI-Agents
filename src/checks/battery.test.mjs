@@ -39,7 +39,7 @@ test("mehrere Packs: neue Regeln kommen dazu, die neueste Nummer gewinnt bei gle
     put("pack-2.json", pack(2, [rule("secrets", [".zwei"]), rule("nur2", [".b"])]));
     const { battery, packs } = activeBattery({ publicKey: PUB });
     assert.deepEqual(packs.map((p) => p.serial), [2, 5]);
-    assert.equal(ids(battery), "php2shell,secrets,webshell,sshd,nur2,nur5,rechte");
+    assert.equal(ids(battery), "php2shell,secrets,webshell,sshd,sshd-leer,nur2,nur5,rechte,schluessel");
     assert.deepEqual(rulesWith(packs).find((r) => r.id === "secrets").names, [".fuenf"]);
   });
 });

@@ -43,6 +43,13 @@ export const BUILTIN = {
         { name: "Aufruf aus Eingabe ($_GET/$_POST[...](...))", i18n: { en: "Call from input ($_GET/$_POST[...](...))", es: "Llamada desde la entrada ($_GET/$_POST[...](...))" }, re: "\\$_(GET|POST|REQUEST|COOKIE)\\[[^]]*\\][[:space:]]*\\(" },
         { name: "eval(base64_decode(...))", i18n: { en: "eval(base64_decode(...))", es: "eval(base64_decode(...))" }, re: "eval[[:space:]]*\\([[:space:]]*(base64_decode|gzinflate|str_rot13)" },
         { name: "System-Sink mit Eingabe", i18n: { en: "System call with input", es: "Llamada al sistema con entrada" }, re: "(system|shell_exec|passthru|proc_open|popen)[[:space:]]*\\([^)]*\\$_(GET|POST|REQUEST|COOKIE)" },
+        { name: "preg_replace mit /e (führt Code aus)", i18n: { en: "preg_replace with /e (runs code)", es: "preg_replace con /e (ejecuta código)" }, re: "preg_replace[[:space:]]*\\([^)]*/e", source: "YARA-Rules webshells, DRL-1.1" },
+        { name: "assert() mit Eingabe", i18n: { en: "assert() with input", es: "assert() con entrada" }, re: "assert[[:space:]]*\\([[:space:]]*\\$_(GET|POST|REQUEST|COOKIE)", source: "YARA-Rules webshells, DRL-1.1" },
+        { name: "create_function() mit Eingabe", i18n: { en: "create_function() with input", es: "create_function() con entrada" }, re: "create_function[[:space:]]*\\([^)]*\\$_(GET|POST|REQUEST|COOKIE)", source: "YARA-Rules webshells, DRL-1.1" },
+        { name: "gzuncompress/gzinflate(base64_decode(...))", i18n: { en: "gzuncompress/gzinflate(base64_decode(...))", es: "gzuncompress/gzinflate(base64_decode(...))" }, re: "(gzuncompress|gzinflate|gzdecode)[[:space:]]*\\([[:space:]]*base64_decode", source: "YARA-Rules webshells, DRL-1.1" },
+        { name: "Bekannte Shell-Kennung (c99/r57/b374k/FilesMan …)", i18n: { en: "Known shell banner (c99/r57/b374k/FilesMan …)", es: "Firma de shell conocida (c99/r57/b374k/FilesMan …)" }, re: "(c99shell|r57shell|b374k|FilesMan|phpspy|JspSpy|wso_version)", source: "YARA-Rules webshells, DRL-1.1" },
+        { name: "eval() einer Variablen (gepackte Shell)", i18n: { en: "eval() of a variable (packed shell)", es: "eval() de una variable (shell empaquetada)" }, re: "eval[[:space:]]*\\([[:space:]]*\\$[a-zA-Z_][a-zA-Z0-9_]*[[:space:]]*\\)", source: "YARA-Rules webshells, DRL-1.1" },
+        { name: "Backtick-Ausführung mit Eingabe", i18n: { en: "Backtick execution with input", es: "Ejecución con comillas invertidas y entrada" }, re: "`[^`]*\\$_(GET|POST|REQUEST|COOKIE)", source: "YARA-Rules webshells, DRL-1.1" },
       ],
       msg: {
         bad: "PHP-Dateien tragen Webshell-Muster.",
@@ -87,6 +94,22 @@ export const BUILTIN = {
       i18n: {
         en: { title: "SSH: root login and password login", part: "One SSH setting is open.", part_how: "At least one of the two doors (root login, password login) is open; the values are below. It is only closed once password login is off.", bad: "Root may log in with a password.", bad_how: "Root login and password login are both open — that is the brute-force door.", ok: "SSH is not the open brute-force door.", ok_how: "Neither root login nor password login is open (values below)." },
         es: { title: "SSH: acceso de root y acceso con contraseña", part: "Una configuración de SSH está abierta.", part_how: "Al menos una de las dos puertas (acceso de root, acceso con contraseña) está abierta; los valores están abajo. Solo está cerrado cuando el acceso con contraseña está apagado.", bad: "Root puede entrar con contraseña.", bad_how: "El acceso de root y el acceso con contraseña están abiertos a la vez: es la puerta de la fuerza bruta.", ok: "SSH no es la puerta abierta de la fuerza bruta.", ok_how: "Ni el acceso de root ni el acceso con contraseña están abiertos (los valores están abajo)." },
+      },
+    },
+    {
+      id: "sshd-leer", type: "sshd_setting", know: "sshd",
+      title: "SSH: Konten ohne Passwort",
+      aliases: ["leere passwörter", "leeres passwort", "empty passwords"],
+      settings: [{ key: "permitemptypasswords", bad: ["yes"] }],
+      msg: {
+        bad: "SSH lässt Konten ohne Passwort zu.",
+        bad_how: "PermitEmptyPasswords steht auf yes: ein Konto ohne Passwort kommt ohne Schlüssel hinein (der Wert steht unten).",
+        ok: "SSH nimmt keine leeren Passwörter an.",
+        ok_how: "PermitEmptyPasswords steht auf no (der Wert steht unten).",
+      },
+      i18n: {
+        en: { title: "SSH: accounts without a password", bad: "SSH accepts accounts without a password.", bad_how: "PermitEmptyPasswords is yes: an account with no password gets in without a key (the value is below).", ok: "SSH does not accept empty passwords.", ok_how: "PermitEmptyPasswords is no (the value is below)." },
+        es: { title: "SSH: cuentas sin contraseña", bad: "SSH acepta cuentas sin contraseña.", bad_how: "PermitEmptyPasswords está en yes: una cuenta sin contraseña entra sin clave (el valor está abajo).", ok: "SSH no acepta contraseñas vacías.", ok_how: "PermitEmptyPasswords está en no (el valor está abajo)." },
       },
     },
   ],

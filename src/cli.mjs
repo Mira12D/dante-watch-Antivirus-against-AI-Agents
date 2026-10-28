@@ -2,22 +2,26 @@
 // Command line entry: flags, one-shot checks and the interactive session.
 import { configureTarget, targetLabel, probe, run, firstLine } from "./core/sh.mjs";
 import { renderResult, renderSummary } from "./core/render.mjs";
+import { installOutputGuard } from "./core/clean.mjs";
 import { RISK, WARN, SAFE, UNKNOWN } from "./core/check.mjs";
 import { ask, recordYes } from "./core/consent.mjs";
 import { banner } from "./mascot.mjs";
 import { activeBattery } from "./checks/battery.mjs";
+import { toSarif } from "./core/sarif.mjs";
 import { demo } from "./checks/demo.mjs";
 import { staleLine, VERSION, BIB_DATE } from "./ticker.mjs";
 import { lang, t, initLang } from "./i18n.mjs";
+installOutputGuard();   // nothing from a scanned file or a server can steer the terminal
 import { tx } from "./i18n-checks.mjs";
 
 function parseArgs(argv) {
-  const a = { ssh: null, key: null, json: false, yes: false, fix: false, demo: false };
+  const a = { ssh: null, key: null, json: false, sarif: false, yes: false, fix: false, demo: false };
   for (let i = 0; i < argv.length; i++) {
     const t = argv[i];
     if (t === "--ssh") a.ssh = argv[++i];
     else if (t === "--key") a.key = argv[++i];
     else if (t === "--json") a.json = true;
+    else if (t === "--sarif") a.sarif = true;
     else if (t === "--yes" || t === "-y") a.yes = true;
     else if (t === "--fix") a.fix = true;
     else if (t === "--demo") a.demo = true;
@@ -39,6 +43,7 @@ const HELP = `Dante — wächter
   --deep       ein Tiefenlauf (wöchentlich, startet der Zeitplan): liest Projektordner nach Schlüsseln, bohrt bei Treffern nach
   --version    welche Version läuft
   --json       Maschinen-Ausgabe
+  --sarif      SARIF 2.1.0 (für GitHub Code Scanning)
   -y, --yes    nicht nachfragen (für Automode/Cron)
 
 Dante ändert nichts ohne dein Ja. Jedes Urteil trägt die echte Zeile; fehlt sie, sagt er „unbekannt“, nie „sicher“.`;
@@ -103,6 +108,7 @@ async function main() {
   const ch = probe();
   if (!ch.reached) {
     const r = { id: "channel", title: "Kanal zum Ziel", verdict: UNKNOWN, was: "Dante konnte " + target + " nicht sehen.", wie: ch.line, wo: target, evidence: [] };
+    if (a.sarif) console.log(JSON.stringify(toSarif([r], { version: VERSION }), null, 2));
     if (a.json) console.log(JSON.stringify({ target, results: [r] }, null, 2));
     else { console.log(banner()); console.log(renderResult(r)); console.log(renderSummary([r], target) + "\n" + C("2", "Kein Urteil über einen Server, den Dante nicht erreicht.")); }
     process.exit(1);
@@ -112,6 +118,7 @@ async function main() {
   const checks = [...battery, ...(a.demo ? [demo] : [])];
   const results = checks.map((c) => { try { return c.run(); } catch (e) { return { id: c.id, title: c.title, verdict: UNKNOWN, was: "Check brach ab.", wie: String((e && e.message) || e), wo: target, evidence: [] }; } });
 
+  if (a.sarif) { console.log(JSON.stringify(toSarif(results, { version: VERSION }), null, 2)); process.exit(results.some((r) => r.verdict === RISK) ? 2 : 0); }
   if (a.json) { console.log(JSON.stringify({ target, results }, null, 2)); process.exit(results.some((r) => r.verdict === RISK) ? 2 : 0); }
 
   console.log(banner());

@@ -3,6 +3,22 @@
 import { lang } from "./i18n.mjs";
 
 const BOOK = [
+  ["SSH-Schlüssel, die Zugang geben (wer hat noch einen Schlüssel)", "SSH keys that grant access (who still has a key)", "Claves SSH que dan acceso (quién tiene todavía una clave)"],
+  ["Schlüssel", "Key", "Clave"],
+  ["Konnte keine authorized_keys lesen.", "Could not read any authorized_keys.", "No se pudo leer ningún authorized_keys."],
+  ["Kein lesbares Konto mit SSH-Schlüsseln gefunden (Rechte? kein SSH?).", "No readable account with SSH keys found (permissions? no SSH?).", "No se encontró ninguna cuenta legible con claves SSH (¿permisos? ¿sin SSH?)."],
+  ["Kein SSH-Schlüssel gibt hier Zugang.", "No SSH key grants access here.", "Ninguna clave SSH da acceso aquí."],
+  ["Die lesbaren Konten haben keine authorized_keys mit Einträgen.", "The readable accounts have no authorized_keys with entries.", "Las cuentas legibles no tienen authorized_keys con entradas."],
+  ["Durchsucht, keine SSH-Schlüssel", "Searched, no SSH keys", "Revisado, sin claves SSH"],
+  ["(keine authorized_keys mit Schlüsseln gefunden)", "(no authorized_keys with keys found)", "(no se encontraron authorized_keys con claves)"],
+  [/^(\d+) Schlüssel geben SSH-Zugang — prüf, dass jeder dir gehört\.$/, "$1 keys grant SSH access — check each one is yours.", "$1 claves dan acceso SSH — comprueba que cada una es tuya."],
+  [/^(\d+) Schlüssel geben SSH-Zugang — und etwas stimmt nicht\.$/, "$1 keys grant SSH access — and something is wrong.", "$1 claves dan acceso SSH — y algo no está bien."],
+  ["Die Zeilen unten zeigen jeden Schlüssel: Konto, Typ, Kommentar, Fingerabdruck. Den Schlüssel selbst zeigt Dante nie. Erkennst du einen nicht, gehört er da nicht hin.", "The lines below show each key: account, type, comment, fingerprint. Dante never shows the key itself. If you do not recognise one, it does not belong there.", "Las líneas de abajo muestran cada clave: cuenta, tipo, comentario, huella. Dante nunca muestra la clave en sí. Si no reconoces alguna, no debería estar ahí."],
+  ["Die Zeilen unten zeigen jeden Schlüssel (Typ, Kommentar, Fingerabdruck) und das Problem. Prüf, dass jeder Schlüssel dir gehört; unbekannte raus.", "The lines below show each key (type, comment, fingerprint) and the problem. Check that each key is yours; remove the ones you do not know.", "Las líneas de abajo muestran cada clave (tipo, comentario, huella) y el problema. Comprueba que cada clave es tuya; quita las que no conozcas."],
+  ["authorized_keys ist von anderen beschreibbar", "authorized_keys is writable by others", "authorized_keys es escribible por otros"],
+  ["SSH-Schlüssel bei einem Konto, das sich nicht anmelden darf", "SSH key on an account that may not log in", "Clave SSH en una cuenta que no puede iniciar sesión"],
+  ["Die beschreibbaren authorized_keys nur für den Besitzer lesbar machen (erst sicherstellen, dass dein eigener Schlüssel drin ist).", "Make the writable authorized_keys readable by the owner only (first make sure your own key is in it).", "Haz que los authorized_keys escribibles sean legibles solo por el dueño (asegúrate primero de que tu propia clave está dentro)."],
+  ["Rechte auf 600 setzen", "Set permissions to 600", "Poner permisos en 600"],
   ["Sicherungskopien öffentlicher Dateien sind für alle lesbar.", "Backup copies of public files are readable by everyone.", "Las copias de seguridad de archivos públicos son legibles por todos."],
   ["Sie enthalten meist nur, was die Seite ohnehin zeigt, können aber alte Reste enthalten. Ansehen und löschen, wenn du sie nicht brauchst.", "They mostly hold only what the site shows anyway, but may contain old leftovers. Look and delete them if you do not need them.", "Suelen contener solo lo que el sitio ya muestra, pero pueden tener restos antiguos. Míralas y bórralas si no las necesitas."],
   ["Lesbare Sicherungskopie einer öffentlichen Datei", "Readable backup copy of a public file", "Copia de seguridad legible de un archivo público"],

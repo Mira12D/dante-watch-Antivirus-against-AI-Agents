@@ -1,6 +1,7 @@
 // Runs commands, locally or over ssh, and returns stdout, stderr and the exit status. All evidence in
 // the program comes through here.
 import { spawn, spawnSync } from "node:child_process";
+import { clean } from "./clean.mjs";
 
 let PREFIX = null; // e.g. ["ssh","-i","/key","root@host"] - set by configureTarget()
 
@@ -54,7 +55,7 @@ export function runLocalAsync(script, { timeout = 15000 } = {}) {
       if (done) return;
       done = true; clearTimeout(timer);
       const status = killed ? null : code;
-      resolve({ cmd: String(script), out: out.trimEnd(), err: err.trimEnd(), code: typeof status === "number" ? status : -1, ok: status === 0, ran: typeof status === "number" && status >= 0, failed: !!errorMsg, errorMsg });
+      resolve({ cmd: String(script), out: clean(out.trimEnd()), err: clean(err.trimEnd()), code: typeof status === "number" ? status : -1, ok: status === 0, ran: typeof status === "number" && status >= 0, failed: !!errorMsg, errorMsg });
     };
     const timer = setTimeout(() => { killed = true; c.kill("SIGKILL"); }, timeout);
     c.stdout.on("data", (d) => (out += d)); c.stderr.on("data", (d) => (err += d));
@@ -73,8 +74,8 @@ function exec(script, prefix, { timeout, input }) {
   let bin, args, verbatim = false;
   if (prefix) { bin = prefix[0]; args = [...prefix.slice(1), s]; } else ({ bin, args, verbatim } = localShell(s));
   const r = spawnSync(bin, args, { encoding: "utf8", timeout, input, maxBuffer: 8 * 1024 * 1024, windowsHide: true, ...(verbatim ? { windowsVerbatimArguments: true } : {}) });
-  const out = (r.stdout || "").trimEnd();
-  const err = (r.stderr || "").trimEnd();
+  const out = clean((r.stdout || "").trimEnd());
+  const err = clean((r.stderr || "").trimEnd());
   return {
     cmd: s,
     out,

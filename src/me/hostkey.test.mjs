@@ -88,3 +88,12 @@ test("exec-Weg: feindlicher Host kommt als EIN Argument an, 'collect' lehnt ihn 
 });
 
 test("keysFromScan ignoriert Müll", () => { assert.deepEqual(keysFromScan("# x\nfoo bar\n"), []); });
+test("geänderter Host-Schlüssel: einmal fragen, dann eine Woche merken (nachgesehen oder nein)", async () => {
+  const { mitmMemory } = await import("./hostkey.mjs");
+  const now = new Date("2026-10-27T12:00:00Z"), h = "203.0.113.18";
+  assert.equal(mitmMemory([], h, now).ask, true);
+  assert.equal(mitmMemory([{ kind: "act", what: "hostkey", detail: h, level: "hint", t: "2026-10-26T10:00:00Z" }], h, now).last.level, "hint");
+  assert.equal(mitmMemory([{ kind: "act", what: "hostkey_no", detail: h, t: "2026-10-27T08:00:00Z" }], h, now).ask, false);
+  assert.equal(mitmMemory([{ kind: "act", what: "hostkey_no", detail: "other.host", t: "2026-10-27T08:00:00Z" }], h, now).ask, true);
+  assert.equal(mitmMemory([{ kind: "act", what: "hostkey", detail: h, t: "2026-10-10T08:00:00Z" }], h, now).ask, true);   // older than a week: ask again
+});

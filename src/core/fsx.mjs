@@ -16,7 +16,7 @@ export function worldWritableFiles(dirs, { depth = 3, limit = 12 } = {}) {
   if (!isLocalTarget()) {
     const cmd = "find " + dirs.join(" ") + " -xdev -maxdepth " + depth + " -type f -perm -0002";
     const r = run(cmd + " 2>/dev/null | head -" + limit);
-    return { ran: r.ran, files: r.out.split("\n").map((l) => l.trim()).filter(Boolean).slice(0, limit), cmd, unreadable: null, errorMsg: r.errorMsg };
+    return { ran: r.ran, files: cleanAll(r.out.split("\n").map((l) => l.trim()).filter(Boolean).slice(0, limit)), cmd, unreadable: null, errorMsg: r.errorMsg };
   }
   const cmd = "dante:find-writable " + dirs.join(" ") + " (depth " + depth + ")";
   if (isWindows()) return { ran: false, files: [], cmd, unreadable: null, errorMsg: "Windows: die Rechte-Suche für alle-beschreibbar ist noch nicht gebaut" };
@@ -42,6 +42,7 @@ export function worldWritableFiles(dirs, { depth = 3, limit = 12 } = {}) {
 // ---- more questions ---------------------------------------------------------------------------------------------------
 
 import { readFileSync, statSync } from "node:fs";
+import { clean, cleanAll } from "./clean.mjs";
 import { spawnSync, spawn } from "node:child_process";
 import net from "node:net";
 import { toJs } from "../pack/ere.mjs";
@@ -63,12 +64,12 @@ export function existingDirs(list) {
 export function execProgram(command, args = [], { timeout = 15000, input } = {}) {
   if (!isLocalTarget()) {
     const r = run([command, ...args].map(sqs).join(" ") + " 2>/dev/null", { timeout });
-    return { ran: r.ran, ok: r.ok, out: r.out, err: r.err, code: r.code, cmd: [command, ...args].join(" ") };
+    return { ran: r.ran, ok: r.ok, out: clean(r.out), err: clean(r.err), code: r.code, cmd: [command, ...args].join(" ") };
   }
   const r = spawnSync(command, args, { encoding: "utf8", timeout, windowsHide: true, ...(input !== undefined ? { input } : {}) });
   const cmd = [command, ...args].join(" ");
   if (r.error) return { ran: false, ok: false, out: "", err: String(r.error.message), code: null, cmd };
-  return { ran: typeof r.status === "number", ok: r.status === 0, out: (r.stdout || "").trimEnd(), err: (r.stderr || "").trimEnd(), code: r.status, cmd };
+  return { ran: typeof r.status === "number", ok: r.status === 0, out: clean((r.stdout || "").trimEnd()), err: clean((r.stderr || "").trimEnd()), code: r.status, cmd };
 }
 
 // A text file, whole. -> { ran, text, cmd }
@@ -77,7 +78,7 @@ export function readText(path, { max = 2 * 1024 * 1024 } = {}) {
     const r = run("cat " + sqs(path) + " 2>/dev/null");
     return { ran: r.ran && r.ok, text: r.out, cmd: "cat " + path };
   }
-  try { return { ran: true, text: readFileSync(path, "utf8").slice(0, max), cmd: "dante:read " + path }; }
+  try { return { ran: true, text: clean(readFileSync(path, "utf8").slice(0, max)), cmd: "dante:read " + path }; }
   catch { return { ran: false, text: "", cmd: "dante:read " + path }; }
 }
 
@@ -107,7 +108,7 @@ export function findFiles(roots, { names, depth = 4, worldReadable = true, limit
     const skip = skipDirs.map((d) => " -not -path " + sqs("*/" + d + "/*")).join("");
     const cmd = "find " + LABEL(roots) + " -maxdepth " + depth + " -type f \\( " + pick + " \\)" + skip + (worldReadable ? " -perm -0004" : "");
     const r = run(cmd + " 2>/dev/null | head -" + limit);
-    return { ran: r.ran, files: r.out.split("\n").map((l) => l.trim()).filter(Boolean).slice(0, limit), cmd, errorMsg: r.errorMsg };
+    return { ran: r.ran, files: cleanAll(r.out.split("\n").map((l) => l.trim()).filter(Boolean).slice(0, limit)), cmd, errorMsg: r.errorMsg };
   }
   const cmd = "dante:find-files " + LABEL(roots) + " (" + names.join(", ") + (worldReadable ? "; lesbar für alle" : "") + ")";
   const want = matchName(names), files = [];
@@ -117,7 +118,7 @@ export function findFiles(roots, { names, depth = 4, worldReadable = true, limit
     if (worldReadable && !(isWindows() ? isOwnerOnly(p) === false : (st.mode & 0o004))) continue;
     files.push(p);
   }
-  return { ran: true, files, cmd, errorMsg: "" };
+  return { ran: true, files: cleanAll(files), cmd, errorMsg: "" };
 }
 
 // Files whose text matches a POSIX extended pattern. -> { ran, files, cmd }; a pattern JavaScript cannot take cleanly: ran:false
@@ -125,7 +126,7 @@ export function grepFiles(roots, ere, { glob = "*", limit = 5, maxBytes = 2 * 10
   if (!isLocalTarget()) {
     const cmd = "grep -rlE " + sqs(ere) + " --include=" + sqs(glob) + " " + LABEL(roots);
     const r = run(cmd + " 2>/dev/null | head -" + limit);
-    return { ran: r.ran, files: r.out.split("\n").map((l) => l.trim()).filter(Boolean).slice(0, limit), cmd: "grep -rlE '<muster>' --include=" + glob + " <webroot>", errorMsg: r.errorMsg };
+    return { ran: r.ran, files: cleanAll(r.out.split("\n").map((l) => l.trim()).filter(Boolean).slice(0, limit)), cmd: "grep -rlE '<muster>' --include=" + glob + " <webroot>", errorMsg: r.errorMsg };
   }
   const cmd = "dante:grep-files '<muster>' " + glob + " " + LABEL(roots);
   const js = toJs(ere); if (js == null) return { ran: false, files: [], cmd, errorMsg: "Muster nicht lokal übersetzbar" };
@@ -137,7 +138,7 @@ export function grepFiles(roots, ere, { glob = "*", limit = 5, maxBytes = 2 * 10
     let text; try { text = readFileSync(p, "latin1"); } catch { continue; }
     if (re.test(text)) files.push(p);
   }
-  return { ran: true, files, cmd, errorMsg: "" };
+  return { ran: true, files: cleanAll(files), cmd, errorMsg: "" };
 }
 
 // The same program run without blocking (the waiting screen keeps moving). On this machine only: no shell, optional stdin.
@@ -149,10 +150,10 @@ export function execProgramAsync(command, args = [], { timeout = 15000, input } 
     let c;
     try { c = spawn(command, args, { stdio: [input !== undefined ? "pipe" : "ignore", "pipe", "pipe"], windowsHide: true }); }
     catch (e) { return resolve({ cmd, ran: false, ok: false, out: "", err: String(e.message), code: null }); }
-    const timer = setTimeout(() => { c.kill("SIGKILL"); fin({ ran: false, ok: false, out: out.trimEnd(), err: "timeout", code: null }); }, timeout);
+    const timer = setTimeout(() => { c.kill("SIGKILL"); fin({ ran: false, ok: false, out: clean(out.trimEnd()), err: "timeout", code: null }); }, timeout);
     c.stdout.on("data", (d) => (out += d)); c.stderr.on("data", (d) => (err += d));
     c.on("error", (e) => fin({ ran: false, ok: false, out: "", err: String(e.message), code: null }));
-    c.on("close", (code) => fin({ ran: typeof code === "number", ok: code === 0, out: out.trimEnd(), err: err.trimEnd(), code }));
+    c.on("close", (code) => fin({ ran: typeof code === "number", ok: code === 0, out: clean(out.trimEnd()), err: clean(err.trimEnd()), code }));
     if (input !== undefined) { c.stdin.on("error", () => {}); c.stdin.end(input); }
   });
 }
@@ -167,4 +168,31 @@ export function tcpOpen(port, { host = "127.0.0.1" } = {}) {
   if (!out) return { ran: false, open: false, cmd, why: "nicht prüfbar" };
   if (out === "open") return { ran: true, open: true, cmd, why: "Verbindung steht" };
   return { ran: true, open: false, cmd, why: out === "silent" ? "keine Antwort" : out === "err:ECONNREFUSED" ? "Verbindung abgelehnt" : out.replace(/^err:/, "") };
+}
+
+// ---- for the "who has a key" check -------------------------------------------------------------
+import osMod from "node:os";
+
+// The permission bits of a single file, as a 3-digit octal string, or null if it cannot be read.
+export function statMode(path) {
+  if (!isLocalTarget()) { const r = run("stat -c '%a' " + sqs(path) + " 2>/dev/null || stat -f '%Lp' " + sqs(path) + " 2>/dev/null"); const m = (r.out || "").trim(); return r.ran && /^[0-7]{3,4}$/.test(m) ? m.slice(-3) : null; }
+  try { return (statSync(path).mode & 0o777).toString(8).padStart(3, "0"); } catch { return null; }
+}
+
+// Login accounts whose home directory we might look into, plus the current user. Parsed from passwd
+// (getent/ /etc/passwd on a server, /etc/passwd locally); the current user's own home is always included.
+export function listHomes() {
+  let text = "";
+  if (!isLocalTarget()) { const r = run("getent passwd 2>/dev/null || cat /etc/passwd 2>/dev/null"); if (r.ran) text = r.out; }
+  else { const r = readText("/etc/passwd", { max: 256 * 1024 }); if (r.ran) text = r.text; }
+  const seen = new Set(), out = [];
+  const add = (user, home, shell) => { const h = String(home || "").replace(/\/$/, ""); if (!h || seen.has(h)) return; seen.add(h); out.push({ user: user || "?", home: h, shell: shell || "" }); };
+  for (const line of String(text).split("\n")) {
+    const f = line.split(":"); if (f.length < 7) continue;
+    const [user, , , , , home, shell] = f;
+    if (/^(\/home\/|\/Users\/|\/root$|\/var\/)/.test(home) && !/\/(nologin|false|sync|shutdown|halt)$/.test(shell || "")) add(user, home, shell);
+    else if (home === "/root") add(user, home, shell);
+  }
+  try { const u = osMod.userInfo(); add(u.username, u.homedir, ""); } catch {}
+  return out;
 }

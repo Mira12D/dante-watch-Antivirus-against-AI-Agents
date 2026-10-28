@@ -12,8 +12,9 @@ const KNOWN = W("kenn\\p{L}*|gefunden|know|found|conoc\\p{L}*|encontr\\p{L}*|fin
 const STATUS = W("wie geht\\p{L}*|wie l[aä]uft|wie steht|how are|how is|how's|c[oó]mo est[aá]n|c[oó]mo van");
 const GOING = W("was (?:\\p{L}+ ){0,4}l[aä]uft|what runs|qu[eé] corre|was ist (?:da |dort |hier |gerade |denn )*los|was geht (?:\\p{L}+ ){0,4}ab|was l[aä]uft(?: da| dort| gerade| hier| so| grad| denn)*|was passiert|was frisst|warum \\p{L}*(?: \\p{L}+)* langsam|wer ist (?:gerade |grad )?(?:eingeloggt|angemeldet|drauf)|welche ports|welche dienste|what(?:'s| is) (?:going on|happening|running|up with)|why is (?:it|my \\p{L}+) so slow|why .{0,20}slow|who(?:'s| is) logged|which ports|what is eating|what(?:'s| is) using|qu[eé] pasa|qu[eé] est[aá] (?:corriendo|pasando)|por qu[eé] .{0,20}lent[oa]|qui[eé]n est[aá] (?:conectado|dentro)|qu[eé] puertos|qu[eé] se ejecuta");
 
+const WHERE = W("wo bin ich(?: hier)?(?: gelandet| gerade| eigentlich)?|was ist das hier f[uü]r|where am i(?: here)?|what(?:'s| is) this (?:environment|machine|place|system)|what environment|d[oó]nde estoy|qu[eé] entorno es");
 /** "was ist mein system", "welcher ist mein mac", "wie viel ram hab ich", "what machine is this", "qué sistema tengo" */
-export const wantsSysInfo = (line, hasTarget) => !hasTarget && THING.test(line) && ASK.test(line) && !(asksWhichServers(line) && !W("system\\p{L}*|betriebssystem|os|version|ram|cpu|platte").test(line)) && !CHECK_VERB.test(line) && !HEALTH.test(line) && !KNOWN.test(line) && !STATUS.test(line) && !GOING.test(line);
+export const wantsSysInfo = (line, hasTarget) => !hasTarget && WHERE.test(line) || !hasTarget && THING.test(line) && ASK.test(line) && !(asksWhichServers(line) && !W("system\\p{L}*|betriebssystem|os|version|ram|cpu|platte").test(line)) && !CHECK_VERB.test(line) && !HEALTH.test(line) && !KNOWN.test(line) && !STATUS.test(line) && !GOING.test(line);
 /** "was ist da los", "warum ist der so langsam", "wer ist eingeloggt", "which ports are open" */
 export const wantsGoingOn = (line, hasTarget) => !hasTarget && GOING.test(line) && !CHECK_VERB.test(line) && !STATUS.test(line);
 
